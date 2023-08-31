@@ -18,16 +18,6 @@
  */
 package org.apache.olingo.server.core;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.server.api.ODataRequest;
@@ -35,6 +25,16 @@ import org.apache.olingo.server.api.serializer.CustomContentTypeSupport;
 import org.apache.olingo.server.api.serializer.RepresentationType;
 import org.apache.olingo.server.api.uri.queryoption.FormatOption;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ContentNegotiatorTest {
 
@@ -297,7 +297,7 @@ public class ContentNegotiatorTest {
 
     CustomContentTypeSupport customContentTypeSupport = mock(CustomContentTypeSupport.class);
     when(customContentTypeSupport.modifySupportedContentTypes(
-        anyListOf(ContentType.class), any(RepresentationType.class)))
+          ArgumentMatchers.anyList(), any(RepresentationType.class)))
         .thenReturn(types);
     return customContentTypeSupport;
   }

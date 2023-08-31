@@ -18,13 +18,6 @@
  */
 package org.apache.olingo.fit.base;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.net.URI;
-
 import org.apache.olingo.client.api.communication.request.AsyncRequestFactory;
 import org.apache.olingo.client.api.communication.request.AsyncRequestWrapper;
 import org.apache.olingo.client.api.communication.request.cud.ODataEntityCreateRequest;
@@ -45,6 +38,10 @@ import org.apache.olingo.commons.api.edm.FullQualifiedName;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.junit.Test;
+
+import java.net.URI;
+
+import static org.junit.Assert.*;
 
 /**
  * 13.2 Interoperable OData Clients
@@ -249,7 +246,7 @@ public class ConformanceTestITCase extends AbstractTestITCase {
     assertEquals("application/json;odata.metadata=minimal", req.getAccept());
 
     final ODataRetrieveResponse<ClientEntity> res = req.execute();
-    assertTrue(res.getContentType().startsWith("application/json; odata.metadata=minimal"));
+    assertTrue(res.getContentType().startsWith("application/json;odata.metadata=minimal"));
 
     assertNotNull(res.getBody());
   }

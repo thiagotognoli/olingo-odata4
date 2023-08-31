@@ -15,7 +15,6 @@
  */
 package org.apache.olingo.fit.tecsvc.client;
 
-import java.net.URI;
 import org.apache.olingo.client.api.ODataClient;
 import org.apache.olingo.client.api.communication.request.cud.ODataEntityCreateRequest;
 import org.apache.olingo.client.api.communication.request.cud.ODataEntityUpdateRequest;
@@ -35,10 +34,11 @@ import org.apache.olingo.commons.api.edm.FullQualifiedName;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+
+import java.net.URI;
+
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 
 /**
@@ -245,7 +245,7 @@ public class ConformanceITCase extends AbstractParamTecSvcITCase {
     assertEquals("application/json;odata.metadata=minimal", req.getAccept());
 
     final ODataRetrieveResponse<ClientEntity> res = req.execute();
-    assertTrue(res.getContentType().startsWith("application/json; odata.metadata=minimal"));
+    assertTrue(res.getContentType().startsWith("application/json;odata.metadata=minimal"));
 
     assertNotNull(res.getBody());
   }

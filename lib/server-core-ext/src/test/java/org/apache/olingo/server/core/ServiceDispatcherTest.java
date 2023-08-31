@@ -18,19 +18,9 @@
  */
 package org.apache.olingo.server.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URI;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.http.HttpHost;
@@ -47,22 +37,19 @@ import org.apache.olingo.commons.core.Encoder;
 import org.apache.olingo.server.api.OData;
 import org.apache.olingo.server.api.ODataHttpHandler;
 import org.apache.olingo.server.api.ServiceMetadata;
-import org.apache.olingo.server.core.requests.ActionRequest;
-import org.apache.olingo.server.core.requests.DataRequest;
-import org.apache.olingo.server.core.requests.FunctionRequest;
-import org.apache.olingo.server.core.requests.MediaRequest;
-import org.apache.olingo.server.core.requests.MetadataRequest;
-import org.apache.olingo.server.core.responses.CountResponse;
-import org.apache.olingo.server.core.responses.EntityResponse;
-import org.apache.olingo.server.core.responses.EntitySetResponse;
-import org.apache.olingo.server.core.responses.MetadataResponse;
-import org.apache.olingo.server.core.responses.NoContentResponse;
-import org.apache.olingo.server.core.responses.PrimitiveValueResponse;
-import org.apache.olingo.server.core.responses.PropertyResponse;
-import org.apache.olingo.server.core.responses.StreamResponse;
+import org.apache.olingo.server.core.requests.*;
+import org.apache.olingo.server.core.responses.*;
+import org.junit.After;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URI;
+
+import static org.junit.Assert.*;
 
 public class ServiceDispatcherTest {
   private static final int TOMCAT_PORT = 9900;
@@ -80,7 +67,7 @@ public class ServiceDispatcherTest {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response)
-        throws IOException {
+            throws IOException {
       OData odata = OData4Impl.newInstance();
 
       ODataHttpHandler handler = odata.createHandler(this.metadata);
@@ -89,7 +76,7 @@ public class ServiceDispatcherTest {
       handler.process(request, response);
     }
   }
-  
+
   public void beforeTest(ServiceHandler serviceHandler) throws Exception {
     MetadataParser parser = new MetadataParser();
     parser.parseAnnotations(true);
@@ -102,11 +89,13 @@ public class ServiceDispatcherTest {
     tomcat.getHost().setAppBase(baseDir.getAbsolutePath());
     Context cxt = tomcat.addContext("/trippin", baseDir.getAbsolutePath());
     Tomcat.addServlet(cxt, "trippin", new SampleODataServlet(serviceHandler, metadata));
-    cxt.addServletMapping("/*", "trippin");
+    cxt.addServletMappingDecoded("/*", "trippin");
     tomcat.setPort(TOMCAT_PORT);
+    tomcat.getConnector().setSecure(false);
     tomcat.start();
   }
 
+  @After
   public void afterTest() throws Exception {
     tomcat.stop();
     tomcat.destroy();
@@ -119,7 +108,7 @@ public class ServiceDispatcherTest {
   private HttpHost getLocalhost() {
     return new HttpHost(tomcat.getHost().getName(), 9900);
   }
-  
+
   private HttpResponse httpGET(String url) throws Exception{
     HttpRequest request = new HttpGet(url);
     return httpSend(request);
@@ -130,21 +119,20 @@ public class ServiceDispatcherTest {
     HttpResponse response = http.execute(getLocalhost(), request);
     return response;
   }
-  
+
   private void helpGETTest(ServiceHandler handler, String path, TestResult validator)
-      throws Exception {
+          throws Exception {
     beforeTest(handler);
     httpGET("http://localhost:" + TOMCAT_PORT + "/" + path);
     validator.validate();
-    afterTest();
   }
 
   private void helpTest(ServiceHandler handler, String path, String method, String payload,
-      TestResult validator) throws Exception {
+                        TestResult validator) throws Exception {
     beforeTest(handler);
 
     DefaultHttpClient http = new DefaultHttpClient();
-    
+
     String editUrl = "http://localhost:" + TOMCAT_PORT + "/" + path;
     HttpRequest request = new HttpGet(editUrl);
     if (method.equals("POST")) {
@@ -163,7 +151,6 @@ public class ServiceDispatcherTest {
     http.execute(getLocalhost(), request);
 
     validator.validate();
-    afterTest();
   }
 
   @Test
@@ -186,7 +173,7 @@ public class ServiceDispatcherTest {
       @Override
       public void validate() throws Exception {
         ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
-        ArgumentCaptor<EntityResponse> arg2 = ArgumentCaptor.forClass(EntityResponse.class);
+        ArgumentCaptor<EntitySetResponse> arg2 = ArgumentCaptor.forClass(EntitySetResponse.class);
         Mockito.verify(handler).read(arg1.capture(), arg2.capture());
 
         DataRequest request = arg1.getValue();
@@ -194,7 +181,7 @@ public class ServiceDispatcherTest {
         // assertEquals("",
         // request.getContextURL(request.getOdata()).getName());
         assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
-            .toContentTypeString());
+                .toContentTypeString());
       }
     });
   }
@@ -231,7 +218,7 @@ public class ServiceDispatcherTest {
         DataRequest request = arg1.getValue();
         assertEquals(1, request.getUriResourceEntitySet().getKeyPredicates().size());
         assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
-            .toContentTypeString());
+                .toContentTypeString());
       }
     });
   }
@@ -251,7 +238,7 @@ public class ServiceDispatcherTest {
         assertFalse(request.isPropertyComplex());
         assertEquals(1, request.getUriResourceEntitySet().getKeyPredicates().size());
         assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
-            .toContentTypeString());
+                .toContentTypeString());
       }
     });
   }
@@ -271,7 +258,7 @@ public class ServiceDispatcherTest {
         assertTrue(request.isPropertyComplex());
         assertEquals(1, request.getUriResourceEntitySet().getKeyPredicates().size());
         assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
-            .toContentTypeString());
+                .toContentTypeString());
       }
     });
   }
@@ -284,7 +271,7 @@ public class ServiceDispatcherTest {
       public void validate() throws Exception {
         ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
         ArgumentCaptor<PrimitiveValueResponse> arg2 = ArgumentCaptor
-            .forClass(PrimitiveValueResponse.class);
+                .forClass(PrimitiveValueResponse.class);
         Mockito.verify(handler).read(arg1.capture(), arg2.capture());
 
         DataRequest request = arg1.getValue();
@@ -304,7 +291,7 @@ public class ServiceDispatcherTest {
       public void validate() throws Exception {
         ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
         ArgumentCaptor<PrimitiveValueResponse> arg2 = ArgumentCaptor
-            .forClass(PrimitiveValueResponse.class);
+                .forClass(PrimitiveValueResponse.class);
         Mockito.verify(handler).read(arg1.capture(), arg2.capture());
 
         DataRequest request = arg1.getValue();
@@ -323,7 +310,7 @@ public class ServiceDispatcherTest {
       @Override
       public void validate() throws Exception {
         ArgumentCaptor<FunctionRequest> arg1 = ArgumentCaptor.forClass(FunctionRequest.class);
-        ArgumentCaptor<PropertyResponse> arg3 = ArgumentCaptor.forClass(PropertyResponse.class);
+        ArgumentCaptor<EntityResponse> arg3 = ArgumentCaptor.forClass(EntityResponse.class);
         ArgumentCaptor<HttpMethod> arg2 = ArgumentCaptor.forClass(HttpMethod.class);
         Mockito.verify(handler).invoke(arg1.capture(), arg2.capture(), arg3.capture());
 
@@ -359,7 +346,7 @@ public class ServiceDispatcherTest {
 
         MediaRequest request = arg1.getValue();
         assertEquals("application/octet-stream", request.getResponseContentType()
-            .toContentTypeString());
+                .toContentTypeString());
       }
     });
   }
@@ -376,7 +363,7 @@ public class ServiceDispatcherTest {
 
         DataRequest request = arg1.getValue();
         assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
-            .toContentTypeString());
+                .toContentTypeString());
       }
     });
   }
@@ -393,7 +380,7 @@ public class ServiceDispatcherTest {
 
         DataRequest request = arg1.getValue();
         assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
-            .toContentTypeString());
+                .toContentTypeString());
       }
     });
   }
@@ -404,22 +391,22 @@ public class ServiceDispatcherTest {
 
     final ServiceHandler handler = Mockito.mock(ServiceHandler.class);
     helpTest(handler, "trippin/People('russelwhyte')/Friends/$ref", "POST", payload,
-        new TestResult() {
-          @Override
-          public void validate() throws Exception {
-            ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
-            ArgumentCaptor<String> arg2 = ArgumentCaptor.forClass(String.class);
-            ArgumentCaptor<URI> arg3 = ArgumentCaptor.forClass(URI.class);
-            ArgumentCaptor<NoContentResponse> arg4 = ArgumentCaptor
-                .forClass(NoContentResponse.class);
-            Mockito.verify(handler).addReference(arg1.capture(), arg2.capture(), arg3.capture(),
-                arg4.capture());
+            new TestResult() {
+              @Override
+              public void validate() throws Exception {
+                ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
+                ArgumentCaptor<String> arg2 = ArgumentCaptor.forClass(String.class);
+                ArgumentCaptor<URI> arg3 = ArgumentCaptor.forClass(URI.class);
+                ArgumentCaptor<NoContentResponse> arg4 = ArgumentCaptor
+                        .forClass(NoContentResponse.class);
+                Mockito.verify(handler).addReference(arg1.capture(), arg2.capture(), arg3.capture(),
+                        arg4.capture());
 
-            DataRequest request = arg1.getValue();
-            assertEquals("application/json;odata.metadata=minimal", request
-                .getResponseContentType().toContentTypeString());
-          }
-        });
+                DataRequest request = arg1.getValue();
+                assertEquals("application/json;odata.metadata=minimal", request
+                        .getResponseContentType().toContentTypeString());
+              }
+            });
   }
 
   @Test
@@ -428,29 +415,29 @@ public class ServiceDispatcherTest {
 
     final ServiceHandler handler = Mockito.mock(ServiceHandler.class);
     helpTest(handler, "trippin/People('russelwhyte')/Friends('someone')/Photo/$ref", "PUT", payload,
-        new TestResult() {
-          @Override
-          public void validate() throws Exception {
-            ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
-            ArgumentCaptor<String> arg2 = ArgumentCaptor.forClass(String.class);
-            ArgumentCaptor<URI> arg3 = ArgumentCaptor.forClass(URI.class);
-            ArgumentCaptor<NoContentResponse> arg4 = ArgumentCaptor
-                .forClass(NoContentResponse.class);
-            Mockito.verify(handler).updateReference(arg1.capture(), arg2.capture(), arg3.capture(),
-                arg4.capture());
+            new TestResult() {
+              @Override
+              public void validate() throws Exception {
+                ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
+                ArgumentCaptor<String> arg2 = ArgumentCaptor.forClass(String.class);
+                ArgumentCaptor<URI> arg3 = ArgumentCaptor.forClass(URI.class);
+                ArgumentCaptor<NoContentResponse> arg4 = ArgumentCaptor
+                        .forClass(NoContentResponse.class);
+                Mockito.verify(handler).updateReference(arg1.capture(), arg2.capture(), arg3.capture(),
+                        arg4.capture());
 
-            DataRequest request = arg1.getValue();
-            assertEquals("application/json;odata.metadata=minimal", request
-                .getResponseContentType().toContentTypeString());
-          }
-        });
+                DataRequest request = arg1.getValue();
+                assertEquals("application/json;odata.metadata=minimal", request
+                        .getResponseContentType().toContentTypeString());
+              }
+            });
   }
-  
+
   @Test
   public void test$id() throws Exception {
     final ServiceHandler handler = Mockito.mock(ServiceHandler.class);
     helpGETTest(handler, "trippin/$entity?$id="+Encoder.encode("http://localhost:" + TOMCAT_PORT
-        + "/trippin/People('russelwhyte')")+"&"+Encoder.encode("$")+"select=FirstName", new TestResult() {
+            + "/trippin/People('russelwhyte')")+"&"+Encoder.encode("$")+"select=FirstName", new TestResult() {
       @Override
       public void validate() throws Exception {
         ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
@@ -459,8 +446,8 @@ public class ServiceDispatcherTest {
 
         DataRequest request = arg1.getValue();
         assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
-            .toContentTypeString());
+                .toContentTypeString());
       }
     });
-  }  
+  }
 }

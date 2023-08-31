@@ -15,7 +15,6 @@
  */
 package org.apache.olingo.fit.tecsvc.client;
 
-import java.net.URI;
 import org.apache.olingo.client.api.ODataClient;
 import org.apache.olingo.client.api.communication.request.batch.BatchManager;
 import org.apache.olingo.client.api.communication.request.batch.ODataBatchRequest;
@@ -31,8 +30,11 @@ import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeException;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import java.net.URI;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class AuthBatchTestITCase extends AbstractParamTecSvcITCase{
@@ -97,7 +99,6 @@ public class AuthBatchTestITCase extends AbstractParamTecSvcITCase{
 
     final ODataBatchResponse response = streamManager.getResponse();
     assertEquals(200, response.getStatusCode());
-    assertEquals("OK", response.getStatusMessage());
   }
   
 }

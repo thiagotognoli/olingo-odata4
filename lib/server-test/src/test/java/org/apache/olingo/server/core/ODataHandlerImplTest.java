@@ -18,28 +18,6 @@
  */
 package org.apache.olingo.server.core;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.olingo.commons.api.edm.FullQualifiedName;
 import org.apache.olingo.commons.api.edm.constants.ODataServiceVersion;
@@ -51,38 +29,9 @@ import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.commons.api.http.HttpMethod;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
-import org.apache.olingo.server.api.OData;
-import org.apache.olingo.server.api.ODataApplicationException;
-import org.apache.olingo.server.api.ODataRequest;
-import org.apache.olingo.server.api.ODataResponse;
-import org.apache.olingo.server.api.ODataServerError;
-import org.apache.olingo.server.api.ServiceMetadata;
+import org.apache.olingo.server.api.*;
 import org.apache.olingo.server.api.batch.BatchFacade;
-import org.apache.olingo.server.api.processor.ActionComplexCollectionProcessor;
-import org.apache.olingo.server.api.processor.ActionComplexProcessor;
-import org.apache.olingo.server.api.processor.ActionEntityCollectionProcessor;
-import org.apache.olingo.server.api.processor.ActionEntityProcessor;
-import org.apache.olingo.server.api.processor.ActionPrimitiveCollectionProcessor;
-import org.apache.olingo.server.api.processor.ActionPrimitiveProcessor;
-import org.apache.olingo.server.api.processor.ActionVoidProcessor;
-import org.apache.olingo.server.api.processor.BatchProcessor;
-import org.apache.olingo.server.api.processor.ComplexCollectionProcessor;
-import org.apache.olingo.server.api.processor.ComplexProcessor;
-import org.apache.olingo.server.api.processor.CountComplexCollectionProcessor;
-import org.apache.olingo.server.api.processor.CountEntityCollectionProcessor;
-import org.apache.olingo.server.api.processor.CountPrimitiveCollectionProcessor;
-import org.apache.olingo.server.api.processor.EntityCollectionProcessor;
-import org.apache.olingo.server.api.processor.EntityProcessor;
-import org.apache.olingo.server.api.processor.ErrorProcessor;
-import org.apache.olingo.server.api.processor.MediaEntityProcessor;
-import org.apache.olingo.server.api.processor.MetadataProcessor;
-import org.apache.olingo.server.api.processor.PrimitiveCollectionProcessor;
-import org.apache.olingo.server.api.processor.PrimitiveProcessor;
-import org.apache.olingo.server.api.processor.PrimitiveValueProcessor;
-import org.apache.olingo.server.api.processor.Processor;
-import org.apache.olingo.server.api.processor.ReferenceCollectionProcessor;
-import org.apache.olingo.server.api.processor.ReferenceProcessor;
-import org.apache.olingo.server.api.processor.ServiceDocumentProcessor;
+import org.apache.olingo.server.api.processor.*;
 import org.apache.olingo.server.api.uri.UriInfo;
 import org.apache.olingo.server.core.debug.ServerCoreDebugger;
 import org.apache.olingo.server.tecsvc.processor.TechnicalActionProcessor;
@@ -90,6 +39,22 @@ import org.apache.olingo.server.tecsvc.provider.ContainerProvider;
 import org.apache.olingo.server.tecsvc.provider.EdmTechProvider;
 import org.junit.Test;
 import org.mockito.internal.verification.VerificationModeFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+;
 
 public class ODataHandlerImplTest {
 
@@ -791,19 +756,19 @@ public class ODataHandlerImplTest {
     final MediaEntityProcessor processor = mock(MediaEntityProcessor.class);
 
     dispatch(HttpMethod.GET, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoInteractions(processor);
 
     dispatch(HttpMethod.POST, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoInteractions(processor);
 
     dispatch(HttpMethod.PUT, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoInteractions(processor);
 
     dispatch(HttpMethod.DELETE, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoInteractions(processor);
     
     dispatch(HttpMethod.HEAD, uri, processor);
-    verifyZeroInteractions(processor);
+    verifyNoInteractions(processor);
   }
 
   @Test
@@ -1108,7 +1073,7 @@ public class ODataHandlerImplTest {
     EntityProcessor processor = mock(EntityProcessor.class);
     final ODataResponse response = dispatch(HttpMethod.POST, "ESAllPrim", null,
         HttpHeader.CONTENT_TYPE, "*/*", processor);
-    verifyZeroInteractions(processor);
+    verifyNoInteractions(processor);
     assertEquals(HttpStatusCode.BAD_REQUEST.getStatusCode(), response.getStatusCode());
   }
 
@@ -1117,7 +1082,7 @@ public class ODataHandlerImplTest {
     EntityProcessor processor = mock(EntityProcessor.class);
     ErrorProcessor errorProcessor = mock(ErrorProcessor.class);
     dispatch(HttpMethod.POST, "ESAllPrim", null, HttpHeader.CONTENT_TYPE, "some/unsupported", errorProcessor);
-    verifyZeroInteractions(processor);
+    verifyNoInteractions(processor);
     verify(errorProcessor).processError(any(ODataRequest.class), any(ODataResponse.class),
         any(ODataServerError.class),
         any(ContentType.class));

@@ -18,26 +18,20 @@
  */
 package org.apache.olingo.fit.tecsvc.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import org.apache.olingo.client.api.communication.request.retrieve.ODataEntitySetRequest;
+import org.apache.olingo.client.api.communication.request.retrieve.ODataPropertyRequest;
+import org.apache.olingo.client.api.communication.response.ODataRetrieveResponse;
+import org.apache.olingo.client.api.domain.*;
+import org.apache.olingo.commons.api.format.ContentType;
+import org.apache.olingo.commons.api.http.HttpStatusCode;
+import org.junit.Test;
+import org.junit.runners.Parameterized;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.olingo.client.api.communication.request.retrieve.ODataEntitySetRequest;
-import org.apache.olingo.client.api.communication.request.retrieve.ODataPropertyRequest;
-import org.apache.olingo.client.api.communication.response.ODataRetrieveResponse;
-import org.apache.olingo.client.api.domain.ClientAnnotation;
-import org.apache.olingo.client.api.domain.ClientEntity;
-import org.apache.olingo.client.api.domain.ClientEntitySet;
-import org.apache.olingo.client.api.domain.ClientOperation;
-import org.apache.olingo.client.api.domain.ClientProperty;
-import org.apache.olingo.commons.api.format.ContentType;
-import org.apache.olingo.commons.api.http.HttpStatusCode;
-import org.junit.Test;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.*;
 
 public class BoundOperationITCase extends AbstractParamTecSvcITCase {
   private static final ContentType CONTENT_TYPE_JSON_FULL_METADATA =
@@ -64,7 +58,7 @@ public class BoundOperationITCase extends AbstractParamTecSvcITCase {
     final ODataRetrieveResponse<ClientEntitySet> response = request.execute();
     saveCookieHeader(response);
     assertEquals(HttpStatusCode.OK.getStatusCode(), response.getStatusCode());
-    assertEquals("application/json; odata.metadata=full", response.getContentType());
+    assertEquals("application/json;odata.metadata=full", response.getContentType());
 
     final ClientEntitySet entitySet = response.getBody();
     assertNotNull(entitySet);
@@ -124,7 +118,7 @@ public class BoundOperationITCase extends AbstractParamTecSvcITCase {
     final ODataRetrieveResponse<ClientProperty> response = request.execute();
     saveCookieHeader(response);
     assertEquals(HttpStatusCode.OK.getStatusCode(), response.getStatusCode());
-    assertEquals("application/json; odata.metadata=full", response.getContentType());
+    assertEquals("application/json;odata.metadata=full", response.getContentType());
 
     final ClientProperty property = response.getBody();
     assertNotNull(property);
@@ -151,7 +145,7 @@ public class BoundOperationITCase extends AbstractParamTecSvcITCase {
     final ODataRetrieveResponse<ClientEntitySet> response = request.execute();
     saveCookieHeader(response);
     assertEquals(HttpStatusCode.OK.getStatusCode(), response.getStatusCode());
-    assertEquals("application/json; odata.metadata=full", response.getContentType());
+    assertEquals("application/json;odata.metadata=full", response.getContentType());
 
     final ClientEntitySet entitySet = response.getBody();
     assertNotNull(entitySet);

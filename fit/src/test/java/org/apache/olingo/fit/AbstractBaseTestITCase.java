@@ -18,13 +18,10 @@
  */
 package org.apache.olingo.fit;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.LifecycleException;
 import org.apache.commons.io.IOUtils;
 import org.apache.olingo.client.api.ODataClient;
@@ -33,6 +30,8 @@ import org.apache.olingo.server.tecsvc.TechnicalServlet;
 import org.apache.olingo.server.tecsvc.async.TechnicalStatusMonitorServlet;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+
+import java.io.IOException;
 
 public abstract class AbstractBaseTestITCase {
 

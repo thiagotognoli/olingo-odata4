@@ -18,52 +18,11 @@
  */
 package org.apache.olingo.fit;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.net.URI;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.ConcurrentModificationException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.mail.Header;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMultipart;
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.Response.Status;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -80,12 +39,8 @@ import org.apache.olingo.client.api.serialization.ODataSerializer;
 import org.apache.olingo.client.core.serialization.AtomSerializer;
 import org.apache.olingo.client.core.serialization.JsonDeserializer;
 import org.apache.olingo.client.core.serialization.JsonSerializer;
-import org.apache.olingo.commons.api.data.ComplexValue;
-import org.apache.olingo.commons.api.data.Entity;
-import org.apache.olingo.commons.api.data.EntityCollection;
 import org.apache.olingo.commons.api.data.Link;
-import org.apache.olingo.commons.api.data.Property;
-import org.apache.olingo.commons.api.data.ValueType;
+import org.apache.olingo.commons.api.data.*;
 import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeException;
 import org.apache.olingo.commons.api.edm.EdmPrimitiveTypeKind;
 import org.apache.olingo.commons.api.format.ContentType;
@@ -98,21 +53,19 @@ import org.apache.olingo.fit.methods.PATCH;
 import org.apache.olingo.fit.rest.ResolvingReferencesInterceptor;
 import org.apache.olingo.fit.rest.XHTTPMethodInterceptor;
 import org.apache.olingo.fit.serializer.FITAtomDeserializer;
-import org.apache.olingo.fit.utils.AbstractUtilities;
-import org.apache.olingo.fit.utils.Accept;
-import org.apache.olingo.fit.utils.Commons;
-import org.apache.olingo.fit.utils.ConstantKey;
-import org.apache.olingo.fit.utils.Constants;
-import org.apache.olingo.fit.utils.FSManager;
-import org.apache.olingo.fit.utils.JSONUtilities;
-import org.apache.olingo.fit.utils.LinkInfo;
-import org.apache.olingo.fit.utils.XMLUtilities;
+import org.apache.olingo.fit.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.mail.Header;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Path("/V40/Static.svc")
@@ -359,7 +312,7 @@ public class Services {
       bos.write(Constants.CRLF);
       bos.write(Constants.CRLF);
 
-      bos.write("HTTP/1.1 202 Accepted".getBytes());
+      bos.write("HTTP/1.1 202".getBytes());
       bos.write(Constants.CRLF);
       bos.write("Location: http://service-root/async-monitor".getBytes());
       bos.write(Constants.CRLF);
