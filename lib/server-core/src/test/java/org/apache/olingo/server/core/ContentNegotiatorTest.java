@@ -44,7 +44,8 @@ public class ContentNegotiatorTest {
   static final private String ACCEPT_CASE_ISO_8859_1 = "application/json;charset=ISO-8859-1";
   static final private String ACCEPT_CASE_FULL = ContentType.JSON_FULL_METADATA.toContentTypeString();
   static final private String ACCEPT_CASE_NONE = ContentType.JSON_NO_METADATA.toContentTypeString();
-  static final private String ACCEPT_CASE_MIN_UTF8_IEEE754 = "application/json;charset=UTF-8;odata.metadata=minimal;IEEE754Compatible=true";
+  static final private String ACCEPT_CASE_MIN_UTF8_IEEE754 
+    = "application/json;charset=UTF-8;odata.metadata=minimal;IEEE754Compatible=true";
   static final private String ACCEPT_CASE_MIN_IEEE754 = ACCEPT_CASE_MIN + ";IEEE754Compatible=true";
   String ACCEPT_CASE_MIN_IEEE754_1 = ACCEPT_CASE_MIN + ";IEEE754Compatible=false";
   static final private String ACCEPT_CASE_MIN_IEEE754_FAIL = ACCEPT_CASE_MIN + ";IEEE754Compatible=xyz";
