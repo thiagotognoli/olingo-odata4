@@ -20,7 +20,6 @@ package org.apache.olingo.server.tecsvc;
 
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
-
 import org.apache.olingo.server.tecsvc.async.TechnicalAsyncService;
 
 /**

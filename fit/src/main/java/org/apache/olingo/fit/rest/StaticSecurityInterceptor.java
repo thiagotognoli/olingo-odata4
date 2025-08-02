@@ -18,14 +18,8 @@
  */
 package org.apache.olingo.fit.rest;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-
 import org.apache.cxf.common.security.SimplePrincipal;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
@@ -33,6 +27,11 @@ import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.security.SecurityContext;
 import org.apache.geronimo.mail.util.Base64;
+
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 public class StaticSecurityInterceptor extends AbstractPhaseInterceptor<Message> {
 

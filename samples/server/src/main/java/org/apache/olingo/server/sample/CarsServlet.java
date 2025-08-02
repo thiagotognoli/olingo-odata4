@@ -18,15 +18,11 @@
  */
 package org.apache.olingo.server.sample;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import org.apache.olingo.commons.api.edmx.EdmxReference;
 import org.apache.olingo.server.api.OData;
 import org.apache.olingo.server.api.ODataHttpHandler;
@@ -36,6 +32,9 @@ import org.apache.olingo.server.sample.edmprovider.CarsEdmProvider;
 import org.apache.olingo.server.sample.processor.CarsProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class CarsServlet extends HttpServlet {
 

@@ -18,17 +18,11 @@
  */
 package org.apache.olingo.server.tecsvc;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Collections;
-import java.util.UUID;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import org.apache.olingo.commons.api.edmx.EdmxReference;
 import org.apache.olingo.commons.api.edmx.EdmxReferenceInclude;
 import org.apache.olingo.server.api.OData;
@@ -44,18 +38,27 @@ import org.apache.olingo.server.tecsvc.provider.EdmTechProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.Collections;
+import java.util.UUID;
+
 public class TechnicalServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
   private static final Logger LOG = LoggerFactory.getLogger(TechnicalServlet.class);
   /**
-   * <p>ETag for the service document and the metadata document</p>
-   * <p>We use the same field for service-document and metadata-document ETags.
+   * <p>
+   * ETag for the service document and the metadata document
+   * </p>
+   * <p>
+   * We use the same field for service-document and metadata-document ETags.
    * It must change whenever the corresponding document changes.
    * We don't know when someone changed the EDM in a way that changes one of these
    * documents, but we do know that the EDM is defined completely in code and that
    * therefore any change must be deployed, resulting in re-loading of this class,
-   * giving this field a new and hopefully unique value.</p>
+   * giving this field a new and hopefully unique value.
+   * </p>
    */
   private static final String metadataETag = "W/\"" + UUID.randomUUID() + "\"";
 

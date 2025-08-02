@@ -30,7 +30,6 @@
                            http://cxf.apache.org/schemas/jaxrs.xsd
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd
-                           http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util.xsd">
 
@@ -40,7 +39,7 @@
   <context:annotation-config/>
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
   <bean class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer"/>
-  
+
   <jaxrs:server id="services" address="/" basePackages="org.apache.olingo.fit">
     <jaxrs:providers>
       <bean class="com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider"/>
@@ -67,7 +66,7 @@
   </bean>
   <bean id="accessTokenService" class="org.apache.cxf.rs.security.oauth2.services.AccessTokenService">
     <property name="dataProvider" ref="oauthProvider"/>
-  </bean>  
+  </bean>
   <bean id="oauthSecurityInterceptor" class="org.apache.olingo.fit.rest.StaticSecurityInterceptor"/>
   <jaxrs:server id="oauthServer" address="/oauth2">
     <jaxrs:serviceBeans>

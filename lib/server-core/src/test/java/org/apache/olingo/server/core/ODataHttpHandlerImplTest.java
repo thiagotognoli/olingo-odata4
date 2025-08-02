@@ -18,17 +18,17 @@
  */
 package org.apache.olingo.server.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.olingo.commons.api.http.HttpMethod;
 import org.apache.olingo.server.api.ODataLibraryException;
 import org.apache.olingo.server.api.ODataRequest;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ODataHttpHandlerImplTest {
 
@@ -164,7 +164,7 @@ public class ODataHttpHandlerImplTest {
       assertEquals(rawServiceResolutionUri, odr.getRawServiceResolutionUri());
     }
   }
-  
+
   @Test
   public void extractUriForController() {
 
@@ -221,7 +221,7 @@ public class ODataHttpHandlerImplTest {
       assertEquals(rawQueryPath, odr.getRawQueryPath());
       assertEquals(rawRequestUri, odr.getRawRequestUri());
       assertEquals(rawServiceResolutionUri, odr.getRawServiceResolutionUri());
-    
+
     }
   }
 }

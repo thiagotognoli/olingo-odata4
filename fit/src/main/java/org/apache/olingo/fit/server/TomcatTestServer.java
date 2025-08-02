@@ -18,32 +18,8 @@
  ******************************************************************************/
 package org.apache.olingo.fit.server;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.SimpleFormatter;
-
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpSessionEvent;
-import jakarta.servlet.http.HttpSessionListener;
-
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
@@ -56,6 +32,24 @@ import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.http.LegacyCookieProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
+
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
 
 /**
  * Server for integration tests.
@@ -168,13 +162,13 @@ public class TomcatTestServer {
 
     private TestServerBuilder(final int fixedPort) {
       initializeProperties();
-      baseDir = getFileForDirProperty(TOMCAT_BASE_DIR);      
+      baseDir = getFileForDirProperty(TOMCAT_BASE_DIR);
       if (!baseDir.exists() && !baseDir.mkdirs()) {
         throw new RuntimeException("Unable to create temporary test directory at {" + baseDir.getAbsolutePath() + "}");
       }
       resourceDir = getFileForDirProperty(PROJECT_RESOURCES_DIR);
-      if(!resourceDir.exists()){
-          throw new RuntimeException("Unable to load resources");
+      if (!resourceDir.exists()) {
+        throw new RuntimeException("Unable to load resources");
       }
 
       tomcat = new Tomcat();
@@ -190,11 +184,13 @@ public class TomcatTestServer {
 
     private void initializeProperties() {
       /*
-       * The property file is build with a maven plugin (properties-maven-plugin) defined in pom.xml of the FIT module. 
-       * Since the property file is build with maven its located inside the resource folder of the project.
+       * The property file is build with a maven plugin (properties-maven-plugin)
+       * defined in pom.xml of the FIT module.
+       * Since the property file is build with maven its located inside the resource
+       * folder of the project.
        */
-      InputStream propertiesFile =
-          Thread.currentThread().getContextClassLoader().getResourceAsStream("mavenBuild.properties");
+      InputStream propertiesFile = Thread.currentThread().getContextClassLoader()
+          .getResourceAsStream("mavenBuild.properties");
       try {
         properties = new Properties();
         properties.load(propertiesFile);
@@ -247,8 +243,8 @@ public class TomcatTestServer {
 
       Context context = tomcat.addWebapp(tomcat.getHost(), contextPath, webAppDir.getAbsolutePath());
       WebappLoader webappLoader = new WebappLoader();
-      WebappClassLoaderBase webappClassLoaderBase =
-              new WebappClassLoader(Thread.currentThread().getContextClassLoader());
+      WebappClassLoaderBase webappClassLoaderBase = new WebappClassLoader(
+          Thread.currentThread().getContextClassLoader());
       webappLoader.setLoaderInstance(webappClassLoaderBase);
       context.setLoader(webappLoader);
       LOG.info("Webapp {} at context {}.", webAppDir.getName(), contextPath);
@@ -287,14 +283,15 @@ public class TomcatTestServer {
       return this;
     }
 
-    public TestServerBuilder addAuthServlet(final Class<? extends HttpServlet> factoryClass, 
-            final String servletPath, final String contextPath)
-        throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException, ServletException {
+    public TestServerBuilder addAuthServlet(final Class<? extends HttpServlet> factoryClass,
+        final String servletPath, final String contextPath)
+        throws InstantiationException, IllegalAccessException,
+        ClassNotFoundException, ServletException {
       if (server != null) {
         return this;
       }
       final String TOMCAT_WEB_XML = "web.xml";
-      String webXMLPath = Thread.currentThread().getContextClassLoader().getResource(TOMCAT_WEB_XML).getPath();      
+      String webXMLPath = Thread.currentThread().getContextClassLoader().getResource(TOMCAT_WEB_XML).getPath();
       String servletClassname = factoryClass.getName();
       HttpServlet httpServlet = (HttpServlet) Class.forName(servletClassname).newInstance();
       Context cxt = tomcat.addWebapp(servletPath, baseDir.getAbsolutePath());
@@ -363,7 +360,7 @@ public class TomcatTestServer {
 
     public void stop() throws LifecycleException {
       if (tomcat.getServer() != null
-              && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
+          && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
         if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
           tomcat.stop();
         }
@@ -378,8 +375,8 @@ public class TomcatTestServer {
 
   public static class SessionHolder implements HttpSessionListener {
 
-    private static final Map<ServletContext, Set<HttpSession>> ALL_SESSIONS =
-            Collections.synchronizedMap(new HashMap<ServletContext, Set<HttpSession>>());
+    private static final Map<ServletContext, Set<HttpSession>> ALL_SESSIONS = Collections
+        .synchronizedMap(new HashMap<ServletContext, Set<HttpSession>>());
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {

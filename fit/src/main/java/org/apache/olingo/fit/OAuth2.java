@@ -18,11 +18,10 @@
  */
 package org.apache.olingo.fit;
 
-import java.io.IOException;
-
 import jakarta.ws.rs.Path;
-
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 @Path("/V40/OAuth2.svc")

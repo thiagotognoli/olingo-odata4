@@ -18,19 +18,9 @@
  */
 package org.apache.olingo.server.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URI;
-
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.http.HttpHost;
@@ -47,23 +37,19 @@ import org.apache.olingo.commons.core.Encoder;
 import org.apache.olingo.server.api.OData;
 import org.apache.olingo.server.api.ODataHttpHandler;
 import org.apache.olingo.server.api.ServiceMetadata;
-import org.apache.olingo.server.core.requests.ActionRequest;
-import org.apache.olingo.server.core.requests.DataRequest;
-import org.apache.olingo.server.core.requests.FunctionRequest;
-import org.apache.olingo.server.core.requests.MediaRequest;
-import org.apache.olingo.server.core.requests.MetadataRequest;
-import org.apache.olingo.server.core.responses.CountResponse;
-import org.apache.olingo.server.core.responses.EntityResponse;
-import org.apache.olingo.server.core.responses.EntitySetResponse;
-import org.apache.olingo.server.core.responses.MetadataResponse;
-import org.apache.olingo.server.core.responses.NoContentResponse;
-import org.apache.olingo.server.core.responses.PrimitiveValueResponse;
-import org.apache.olingo.server.core.responses.PropertyResponse;
-import org.apache.olingo.server.core.responses.StreamResponse;
+import org.apache.olingo.server.core.requests.*;
+import org.apache.olingo.server.core.responses.*;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URI;
+
+import static org.junit.Assert.*;
 
 public class ServiceDispatcherTest {
   private static final int TOMCAT_PORT = 9900;
@@ -90,7 +76,7 @@ public class ServiceDispatcherTest {
       handler.process(request, response);
     }
   }
-  
+
   public void beforeTest(ServiceHandler serviceHandler) throws Exception {
     MetadataParser parser = new MetadataParser();
     parser.parseAnnotations(true);
@@ -122,18 +108,18 @@ public class ServiceDispatcherTest {
   private HttpHost getLocalhost() {
     return new HttpHost(tomcat.getHost().getName(), 9900);
   }
-  
-  private HttpResponse httpGET(String url) throws Exception{
+
+  private HttpResponse httpGET(String url) throws Exception {
     HttpRequest request = new HttpGet(url);
     return httpSend(request);
   }
 
-  private HttpResponse httpSend(HttpRequest request) throws Exception{
+  private HttpResponse httpSend(HttpRequest request) throws Exception {
     DefaultHttpClient http = new DefaultHttpClient();
     HttpResponse response = http.execute(getLocalhost(), request);
     return response;
   }
-  
+
   private void helpGETTest(ServiceHandler handler, String path, TestResult validator)
       throws Exception {
     beforeTest(handler);
@@ -146,7 +132,7 @@ public class ServiceDispatcherTest {
     beforeTest(handler);
 
     DefaultHttpClient http = new DefaultHttpClient();
-    
+
     String editUrl = "http://localhost:" + TOMCAT_PORT + "/" + path;
     HttpRequest request = new HttpGet(editUrl);
     if (method.equals("POST")) {
@@ -446,22 +432,22 @@ public class ServiceDispatcherTest {
           }
         });
   }
-  
+
   @Test
   public void test$id() throws Exception {
     final ServiceHandler handler = Mockito.mock(ServiceHandler.class);
-    helpGETTest(handler, "trippin/$entity?$id="+Encoder.encode("http://localhost:" + TOMCAT_PORT
-        + "/trippin/People('russelwhyte')")+"&"+Encoder.encode("$")+"select=FirstName", new TestResult() {
-      @Override
-      public void validate() throws Exception {
-        ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
-        ArgumentCaptor<EntityResponse> arg2 = ArgumentCaptor.forClass(EntityResponse.class);
-        Mockito.verify(handler).read(arg1.capture(), arg2.capture());
+    helpGETTest(handler, "trippin/$entity?$id=" + Encoder.encode("http://localhost:" + TOMCAT_PORT
+        + "/trippin/People('russelwhyte')") + "&" + Encoder.encode("$") + "select=FirstName", new TestResult() {
+          @Override
+          public void validate() throws Exception {
+            ArgumentCaptor<DataRequest> arg1 = ArgumentCaptor.forClass(DataRequest.class);
+            ArgumentCaptor<EntityResponse> arg2 = ArgumentCaptor.forClass(EntityResponse.class);
+            Mockito.verify(handler).read(arg1.capture(), arg2.capture());
 
-        DataRequest request = arg1.getValue();
-        assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
-            .toContentTypeString());
-      }
-    });
-  }  
+            DataRequest request = arg1.getValue();
+            assertEquals("application/json;odata.metadata=minimal", request.getResponseContentType()
+                .toContentTypeString());
+          }
+        });
+  }
 }

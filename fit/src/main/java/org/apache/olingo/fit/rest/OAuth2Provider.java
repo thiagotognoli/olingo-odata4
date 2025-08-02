@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -18,14 +18,7 @@
  */
 package org.apache.olingo.fit.rest;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.cxf.rs.security.oauth2.common.AccessTokenRegistration;
-import org.apache.cxf.rs.security.oauth2.common.Client;
-import org.apache.cxf.rs.security.oauth2.common.OAuthPermission;
-import org.apache.cxf.rs.security.oauth2.common.ServerAccessToken;
-import org.apache.cxf.rs.security.oauth2.common.UserSubject;
+import org.apache.cxf.rs.security.oauth2.common.*;
 import org.apache.cxf.rs.security.oauth2.grants.code.AuthorizationCodeDataProvider;
 import org.apache.cxf.rs.security.oauth2.grants.code.AuthorizationCodeRegistration;
 import org.apache.cxf.rs.security.oauth2.grants.code.ServerAuthorizationCodeGrant;
@@ -33,6 +26,8 @@ import org.apache.cxf.rs.security.oauth2.provider.OAuthServiceException;
 import org.apache.cxf.rs.security.oauth2.tokens.bearer.BearerAccessToken;
 import org.apache.cxf.rs.security.oauth2.tokens.refresh.RefreshToken;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class OAuth2Provider implements AuthorizationCodeDataProvider {
 
@@ -80,9 +75,9 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
     final List<String> scope = acr.getApprovedScope().isEmpty()
         ? acr.getRequestedScope()
         : acr.getApprovedScope();
-        grant.setApprovedScopes(scope);
+    grant.setApprovedScopes(scope);
 
-        return grant;
+    return grant;
   }
 
   @Override
@@ -99,11 +94,11 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
     final List<String> scope = atr.getApprovedScope().isEmpty()
         ? atr.getRequestedScope()
         : atr.getApprovedScope();
-        token.setScopes(convertScopeToPermissions(atr.getClient(), scope));
-        token.setSubject(atr.getSubject());
-        token.setGrantType(atr.getGrantType());
+    token.setScopes(convertScopeToPermissions(atr.getClient(), scope));
+    token.setSubject(atr.getSubject());
+    token.setGrantType(atr.getGrantType());
 
-        return token;
+    return token;
   }
 
   @Override
@@ -125,8 +120,8 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
   }
 
   @Override
-  public List<ServerAuthorizationCodeGrant>
-  getCodeGrants(Client client, UserSubject userSubject) throws OAuthServiceException {
+  public List<ServerAuthorizationCodeGrant> getCodeGrants(Client client, UserSubject userSubject)
+      throws OAuthServiceException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

@@ -18,13 +18,6 @@
  */
 package org.apache.olingo.server.core.debug;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.olingo.commons.api.format.ContentType;
@@ -37,6 +30,13 @@ import org.apache.olingo.server.api.debug.DebugInformation;
 import org.apache.olingo.server.api.debug.DebugSupport;
 import org.apache.olingo.server.api.debug.RuntimeMeasurement;
 import org.apache.olingo.server.api.uri.UriInfo;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ServerCoreDebugger {
 
@@ -54,7 +54,8 @@ public class ServerCoreDebugger {
 
   public void resolveDebugMode(final HttpServletRequest request) {
     if (debugSupport != null) {
-      // Should we read the parameter from the servlet here and ignore multiple parameters?
+      // Should we read the parameter from the servlet here and ignore multiple
+      // parameters?
       debugFormat = request.getParameter(DebugSupport.ODATA_DEBUG_QUERY_PARAMETER);
       if (debugFormat != null) {
         debugSupport.init(odata);
@@ -62,7 +63,7 @@ public class ServerCoreDebugger {
       }
     }
   }
-  
+
   public ODataResponse createDebugResponse(final ODataRequest request, final ODataResponse response,
       final Exception exception, final UriInfo uriInfo, final Map<String, String> serverEnvironmentVariables) {
     // Failsafe so we do not generate unauthorized debug messages
@@ -71,8 +72,8 @@ public class ServerCoreDebugger {
     }
 
     try {
-      DebugInformation debugInfo =
-          createDebugInformation(request, response, exception, uriInfo, serverEnvironmentVariables);
+      DebugInformation debugInfo = createDebugInformation(request, response, exception, uriInfo,
+          serverEnvironmentVariables);
 
       return debugSupport.createDebugResponse(debugFormat, debugInfo);
     } catch (Exception e) {

@@ -18,26 +18,11 @@
  */
 package org.apache.olingo.fit;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DefaultValue;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.olingo.fit.metadata.Metadata;
@@ -48,19 +33,24 @@ import org.apache.olingo.fit.utils.Constants;
 import org.apache.olingo.fit.utils.FSManager;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 @Service
 @Path("/V40/Demo.svc")
 public class Demo extends Services {
 
   public Demo() throws IOException {
-    super(new Metadata(FSManager.instance().
-        readRes("demo" + StringUtils.capitalize(Constants.get(ConstantKey.METADATA)), Accept.XML)));
+    super(new Metadata(FSManager.instance()
+        .readRes("demo" + StringUtils.capitalize(Constants.get(ConstantKey.METADATA)), Accept.XML)));
   }
 
   private Response replaceServiceName(final Response response) {
     try {
-      final String content = IOUtils.toString((InputStream) response.getEntity(), Constants.ENCODING).
-          replaceAll("Static\\.svc", "Demo.svc");
+      final String content = IOUtils.toString((InputStream) response.getEntity(), Constants.ENCODING)
+          .replaceAll("Static\\.svc", "Demo.svc");
 
       final Response.ResponseBuilder builder = Response.status(response.getStatus());
       for (String headerName : response.getHeaders().keySet()) {

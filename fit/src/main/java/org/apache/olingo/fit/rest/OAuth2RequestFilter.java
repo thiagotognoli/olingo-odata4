@@ -21,7 +21,6 @@ package org.apache.olingo.fit.rest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.ext.Provider;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.apache.cxf.rs.security.jose.jwt.JoseJwtConsumer;
@@ -32,16 +31,17 @@ public class OAuth2RequestFilter extends OAuthRequestFilter {
 
   @Inject
   public OAuth2RequestFilter(JoseJwtConsumer joseJwtConsumer, OAuth2Provider oAuth2Provider,
-                             MessageContext messageContext) {
+      MessageContext messageContext) {
     super.setJwtTokenConsumer(joseJwtConsumer);
     super.setDataProvider(oAuth2Provider);
     this.setMessageContext(messageContext);
 
   }
+
   @Override
   public void filter(final ContainerRequestContext context) {
-    final String svcName =
-        StringUtils.substringBefore(StringUtils.substringAfter(context.getUriInfo().getPath(), "/"), "/");
+    final String svcName = StringUtils.substringBefore(StringUtils.substringAfter(context.getUriInfo().getPath(), "/"),
+        "/");
     if ("OAuth2.svc".equals(svcName)) {
       super.filter(context);
     }

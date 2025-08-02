@@ -82,6 +82,7 @@
     <servlet.version>3.1.0</servlet.version>
     <cxf.version>4.0.3</cxf.version>
     <netty.version>4.1.97.Final</netty.version>
+    <spring.version>6.0.9</spring.version>
 
     <velocity.version>1.7</velocity.version>
     <maven.plugin.api.version>3.6.1</maven.plugin.api.version>
@@ -95,6 +96,8 @@
     <xmlunit.version>1.6</xmlunit.version>
     <mockito.core.version>5.3.1</mockito.core.version>
     <junit.version>4.13.2</junit.version>
+    <javax.activation.version>1.1</javax.activation.version>
+    <geronimo.version>1.0.1</geronimo.version>
 
     <android.platform.version>4.1.1.4</android.platform.version>
     <stax.api.version>1.0-2</stax.api.version>
@@ -124,6 +127,15 @@
     <project.build.release.version>8</project.build.release.version>
     <project.build.outputTimestamp>${maven.build.timestamp}</project.build.outputTimestamp>
     <olingo.deploy.skip>true</olingo.deploy.skip>
+
+
+    <!-- JAKARTA -->
+    <jakarta.inject.version>2.0.1</jakarta.inject.version>
+    <jakarta.ws.version>3.1.0</jakarta.ws.version>
+    <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
+    <jakarta.annotation.version>2.1.1</jakarta.annotation.version>
+    <jakarta.xml.version>4.0.0</jakarta.xml.version>
+
 
     <!-- Setting needed for Java 8 release builds -->
     <additionalparam>-Xdoclint:none</additionalparam>

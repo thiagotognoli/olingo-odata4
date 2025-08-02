@@ -18,16 +18,6 @@
  */
 package org.apache.olingo.server.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.olingo.commons.api.edm.Edm;
 import org.apache.olingo.commons.api.edm.EdmBindingTarget;
 import org.apache.olingo.commons.api.edmx.EdmxReference;
@@ -47,13 +37,22 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class PreconditionsValidatorTest {
 
   private static final OData odata = OData.newInstance();
   private static final Edm edm = odata.createServiceMetadata(
-      new EdmTechProvider(), Collections.<EdmxReference> emptyList()).getEdm();
+      new EdmTechProvider(), Collections.<EdmxReference>emptyList()).getEdm();
 
-  // -------------- POSITIVE TESTS --------------------------------------------------------------------------------
+  // -------------- POSITIVE TESTS
+  // --------------------------------------------------------------------------------
 
   @Test
   public void simpleEntity() throws Exception {
@@ -150,7 +149,8 @@ public class PreconditionsValidatorTest {
     assertFalse(new PreconditionsValidator(uriInfo).mustValidatePreconditions(support, true));
   }
 
-  // -------------- IGNORE VALIDATION TESTS -----------------------------------------------------------------------
+  // -------------- IGNORE VALIDATION TESTS
+  // -----------------------------------------------------------------------
 
   @Test
   public void entitySetMustBeIgnored() throws Exception {
@@ -206,7 +206,8 @@ public class PreconditionsValidatorTest {
           assertEquals(entitySetName, ((EdmBindingTarget) invocation.getArguments()[0]).getName());
         }
         return true;
-      }};
+      }
+    };
     when(support.hasETag(any(EdmBindingTarget.class))).thenAnswer(answer);
     when(support.hasMediaETag(any(EdmBindingTarget.class))).thenAnswer(answer);
 

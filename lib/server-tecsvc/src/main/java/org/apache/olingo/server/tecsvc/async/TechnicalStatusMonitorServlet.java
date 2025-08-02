@@ -18,13 +18,13 @@
  */
 package org.apache.olingo.server.tecsvc.async;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 
 public class TechnicalStatusMonitorServlet extends HttpServlet {
@@ -37,9 +37,9 @@ public class TechnicalStatusMonitorServlet extends HttpServlet {
       throws ServletException, IOException {
     try {
       TechnicalAsyncService asyncService = TechnicalAsyncService.getInstance();
-      if("/list".equals(request.getPathInfo())) {
+      if ("/list".equals(request.getPathInfo())) {
         asyncService.listQueue(response);
-      } else if(asyncService.isStatusMonitorResource(request)) {
+      } else if (asyncService.isStatusMonitorResource(request)) {
         asyncService.handle(request, response);
       }
     } catch (final Exception e) {

@@ -18,32 +18,24 @@
  */
 package org.apache.olingo.fit.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import jakarta.ws.rs.NotFoundException;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.olingo.fit.metadata.Metadata;
-import org.apache.olingo.fit.metadata.NavigationProperty;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import jakarta.ws.rs.NotFoundException;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.olingo.fit.metadata.Metadata;
+import org.apache.olingo.fit.metadata.NavigationProperty;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.*;
 
 public class JSONUtilities extends AbstractUtilities {
 
@@ -61,7 +53,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   protected InputStream addLinks(
       final String entitySetName, final String entitykey, final InputStream is, final Set<String> links)
-          throws IOException {
+      throws IOException {
 
     final ObjectNode srcNode = (ObjectNode) mapper.readTree(is);
     IOUtils.closeQuietly(is);
@@ -141,7 +133,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   protected InputStream normalizeLinks(
       final String entitySetName, final String entityKey, final InputStream is, final NavigationLinks links)
-          throws IOException {
+      throws IOException {
 
     final ObjectNode srcNode = (ObjectNode) mapper.readTree(is);
 
@@ -247,7 +239,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   public InputStream readEntities(
       final List<String> links, final String linkName, final String next, final boolean forceFeed)
-          throws IOException {
+      throws IOException {
 
     if (links.isEmpty()) {
       throw new NotFoundException();
@@ -264,8 +256,8 @@ public class JSONUtilities extends AbstractUtilities {
     for (String link : links) {
       try {
         final Map.Entry<String, String> uriMap = Commons.parseEntityURI(link);
-        final Map.Entry<String, InputStream> entity =
-            readEntity(uriMap.getKey(), uriMap.getValue(), Accept.JSON_FULLMETA);
+        final Map.Entry<String, InputStream> entity = readEntity(uriMap.getKey(), uriMap.getValue(),
+            Accept.JSON_FULLMETA);
 
         if (bos.size() > 1) {
           bos.write(",".getBytes());
@@ -295,7 +287,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   protected InputStream replaceLink(
       final InputStream toBeChanged, final String linkName, final InputStream replacement)
-          throws IOException {
+      throws IOException {
 
     final ObjectNode toBeChangedNode = (ObjectNode) mapper.readTree(toBeChanged);
     final ObjectNode replacementNode = (ObjectNode) mapper.readTree(replacement);
@@ -391,7 +383,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   public InputStream replaceProperty(
       final InputStream src, final InputStream replacement, final List<String> path, final boolean justValue)
-          throws IOException {
+      throws IOException {
 
     final ObjectNode srcNode = (ObjectNode) mapper.readTree(src);
     IOUtils.closeQuietly(src);

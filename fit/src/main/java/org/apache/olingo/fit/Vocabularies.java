@@ -18,22 +18,17 @@
  */
 package org.apache.olingo.fit;
 
-import java.io.IOException;
-
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import org.apache.olingo.fit.metadata.Metadata;
-import org.apache.olingo.fit.utils.Accept;
-import org.apache.olingo.fit.utils.ConstantKey;
-import org.apache.olingo.fit.utils.Constants;
-import org.apache.olingo.fit.utils.FSManager;
-import org.apache.olingo.fit.utils.XMLUtilities;
+import org.apache.olingo.fit.utils.*;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 @Path("/V40/Vocabularies.svc")
@@ -55,8 +50,8 @@ public class Vocabularies {
       return xml.createResponse(
           null,
           FSManager.instance().readRes("vocabularies-" + Constants.get(ConstantKey.METADATA), Accept.XML),
-              null,
-              Accept.XML);
+          null,
+          Accept.XML);
     } catch (Exception e) {
       return xml.createFaultResponse(Accept.XML.toString(), e);
     }

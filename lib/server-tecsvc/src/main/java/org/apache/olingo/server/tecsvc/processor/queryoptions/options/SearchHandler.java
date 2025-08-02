@@ -18,13 +18,7 @@
  */
 package org.apache.olingo.server.tecsvc.processor.queryoptions.options;
 
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Locale;
-
 import jakarta.xml.bind.DatatypeConverter;
-
 import org.apache.olingo.commons.api.data.Entity;
 import org.apache.olingo.commons.api.data.EntityCollection;
 import org.apache.olingo.commons.api.data.Property;
@@ -35,6 +29,11 @@ import org.apache.olingo.server.api.uri.queryoption.search.SearchBinary;
 import org.apache.olingo.server.api.uri.queryoption.search.SearchBinaryOperatorKind;
 import org.apache.olingo.server.api.uri.queryoption.search.SearchExpression;
 import org.apache.olingo.server.api.uri.queryoption.search.SearchTerm;
+
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.Locale;
 
 public class SearchHandler {
 
@@ -171,7 +170,7 @@ public class SearchHandler {
           HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), Locale.ROOT);
     }
   }
-  
+
   private static boolean isTrue(final SearchExpression searchExpression, final Entity entity)
       throws ODataApplicationException {
     if (searchExpression.isSearchBinary()) {
@@ -192,7 +191,7 @@ public class SearchHandler {
     throw new ODataApplicationException("Found unknown SearchExpression: " + searchExpression,
         HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), Locale.ROOT);
   }
-  
+
   private static boolean isTrue(final SearchExpression searchExpression, final Property property)
       throws ODataApplicationException {
     if (searchExpression.isSearchBinary()) {
