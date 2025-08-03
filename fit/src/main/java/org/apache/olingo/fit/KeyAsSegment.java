@@ -44,8 +44,8 @@ public class KeyAsSegment extends Services {
 
   private Response replaceServiceName(final Response response) {
     try {
-      final String content = IOUtils.toString((InputStream) response.getEntity(), Constants.ENCODING).
-          replaceAll("Static\\.svc", "KeyAsSegment.svc");
+      final String content = IOUtils.toString((InputStream) response.getEntity(), Constants.ENCODING)
+          .replaceAll("Static\\.svc", "KeyAsSegment.svc");
 
       final Response.ResponseBuilder builder = Response.status(response.getStatus());
       for (String headerName : response.getHeaders().keySet()) {
@@ -126,8 +126,8 @@ public class KeyAsSegment extends Services {
       @PathParam("entityId") final String entityId,
       final String entity) {
 
-    return replaceServiceName(super
-        .replaceEntity(uriInfo, accept, contentType, prefer, entitySetName, entityId, entity));
+    return replaceServiceName(
+        super.replaceEntity(uriInfo, accept, contentType, prefer, entitySetName, entityId, entity));
   }
 
   @POST

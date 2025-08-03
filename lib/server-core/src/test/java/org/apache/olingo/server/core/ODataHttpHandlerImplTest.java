@@ -19,6 +19,7 @@
 package org.apache.olingo.server.core;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.apache.olingo.commons.api.http.HttpMethod;
 import org.apache.olingo.server.api.ODataLibraryException;
 import org.apache.olingo.server.api.ODataRequest;
@@ -163,7 +164,7 @@ public class ODataHttpHandlerImplTest {
       assertEquals(rawServiceResolutionUri, odr.getRawServiceResolutionUri());
     }
   }
-  
+
   @Test
   public void extractUriForController() {
 
@@ -220,7 +221,7 @@ public class ODataHttpHandlerImplTest {
       assertEquals(rawQueryPath, odr.getRawQueryPath());
       assertEquals(rawRequestUri, odr.getRawRequestUri());
       assertEquals(rawServiceResolutionUri, odr.getRawServiceResolutionUri());
-    
+
     }
   }
 }

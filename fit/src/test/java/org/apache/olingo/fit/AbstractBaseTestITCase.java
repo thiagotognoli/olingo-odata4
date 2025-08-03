@@ -41,9 +41,9 @@ public abstract class AbstractBaseTestITCase {
 
   @BeforeClass
   public static void init()
-      throws LifecycleException, IOException, 
-          InstantiationException, IllegalAccessException, 
-          ClassNotFoundException, ServletException {
+      throws LifecycleException, IOException,
+      InstantiationException, IllegalAccessException,
+      ClassNotFoundException, ServletException {
     server = TomcatTestServer.init(9080)
         .addServlet(TechnicalServlet.class, "/odata-server-tecsvc/odata.svc/*")
         .addServlet(TechnicalStatusMonitorServlet.class, "/odata-server-tecsvc/status/*")

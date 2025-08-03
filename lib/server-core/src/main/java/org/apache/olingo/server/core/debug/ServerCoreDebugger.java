@@ -19,6 +19,7 @@
 package org.apache.olingo.server.core.debug;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.apache.olingo.commons.api.format.ContentType;
 import org.apache.olingo.commons.api.http.HttpHeader;
 import org.apache.olingo.commons.api.http.HttpStatusCode;
@@ -53,7 +54,8 @@ public class ServerCoreDebugger {
 
   public void resolveDebugMode(final HttpServletRequest request) {
     if (debugSupport != null) {
-      // Should we read the parameter from the servlet here and ignore multiple parameters?
+      // Should we read the parameter from the servlet here and ignore multiple
+      // parameters?
       debugFormat = request.getParameter(DebugSupport.ODATA_DEBUG_QUERY_PARAMETER);
       if (debugFormat != null) {
         debugSupport.init(odata);
@@ -61,7 +63,7 @@ public class ServerCoreDebugger {
       }
     }
   }
-  
+
   public ODataResponse createDebugResponse(final ODataRequest request, final ODataResponse response,
       final Exception exception, final UriInfo uriInfo, final Map<String, String> serverEnvironmentVariables) {
     // Failsafe so we do not generate unauthorized debug messages
@@ -70,8 +72,8 @@ public class ServerCoreDebugger {
     }
 
     try {
-      DebugInformation debugInfo =
-          createDebugInformation(request, response, exception, uriInfo, serverEnvironmentVariables);
+      DebugInformation debugInfo = createDebugInformation(request, response, exception, uriInfo,
+          serverEnvironmentVariables);
 
       return debugSupport.createDebugResponse(debugFormat, debugInfo);
     } catch (Exception e) {

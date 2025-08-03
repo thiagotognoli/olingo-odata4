@@ -58,8 +58,7 @@ public class FSManager {
   private FSManager() throws IOException {
     fsManager = VFS.getManager();
 
-    final FileObject basePath =
-        fsManager.resolveFile(RES_PREFIX + File.separatorChar + ODataServiceVersion.V40.name());
+    final FileObject basePath = fsManager.resolveFile(RES_PREFIX + File.separatorChar + ODataServiceVersion.V40.name());
     final String absoluteBaseFolder = basePath.getURL().getPath();
 
     for (FileObject fo : find(basePath, null)) {
@@ -109,7 +108,7 @@ public class FSManager {
     content.reset();
 
     new JsonSerializer(true, ContentType.JSON_FULL_METADATA).write(writer, container);
-    
+
     putInMemory(new ByteArrayInputStream(content.toByteArray()), getAbsolutePath(relativePath, Accept.JSON_FULLMETA));
   }
 

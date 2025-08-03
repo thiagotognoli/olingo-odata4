@@ -31,7 +31,7 @@ public class OAuth2RequestFilter extends OAuthRequestFilter {
 
   @Inject
   public OAuth2RequestFilter(JoseJwtConsumer joseJwtConsumer, OAuth2Provider oAuth2Provider,
-                             MessageContext messageContext) {
+      MessageContext messageContext) {
     super.setJwtTokenConsumer(joseJwtConsumer);
     super.setDataProvider(oAuth2Provider);
     this.setMessageContext(messageContext);
@@ -40,8 +40,8 @@ public class OAuth2RequestFilter extends OAuthRequestFilter {
 
   @Override
   public void filter(final ContainerRequestContext context) {
-    final String svcName =
-        StringUtils.substringBefore(StringUtils.substringAfter(context.getUriInfo().getPath(), "/"), "/");
+    final String svcName = StringUtils.substringBefore(StringUtils.substringAfter(context.getUriInfo().getPath(), "/"),
+        "/");
     if ("OAuth2.svc".equals(svcName)) {
       super.filter(context);
     }

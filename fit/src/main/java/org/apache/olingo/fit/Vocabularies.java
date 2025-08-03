@@ -50,8 +50,8 @@ public class Vocabularies {
       return xml.createResponse(
           null,
           FSManager.instance().readRes("vocabularies-" + Constants.get(ConstantKey.METADATA), Accept.XML),
-              null,
-              Accept.XML);
+          null,
+          Accept.XML);
     } catch (Exception e) {
       return xml.createFaultResponse(Accept.XML.toString(), e);
     }

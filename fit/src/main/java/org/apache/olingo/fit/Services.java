@@ -386,8 +386,8 @@ public class Services {
     final Enumeration<Header> en = body.getAllHeaders();
 
     Header header = en.nextElement();
-    final String request =
-        header.getName() + (StringUtils.isNotBlank(header.getValue()) ? ":" + header.getValue() : "");
+    final String request = header.getName()
+        + (StringUtils.isNotBlank(header.getValue()) ? ":" + header.getValue() : "");
 
     final Matcher matcher = REQUEST_PATTERN.matcher(request);
     final Matcher matcherRef = BATCH_REQUEST_REF_PATTERN.matcher(request);
@@ -511,7 +511,7 @@ public class Services {
           addItemIntro(bos, null);
 
           res = bodyPartRequest(new MimeBodyPart(obj.getDataHandler().getInputStream()),
-              Collections.<String, String> emptyMap());
+              Collections.<String, String>emptyMap());
 
           if (res.getStatus() >= 400) {
             goon = continueOnError;
@@ -613,8 +613,8 @@ public class Services {
    * Retrieve entities from the given entity set and the given type.
    *
    * @param accept Accept header.
-   * @param name entity set.
-   * @param type entity type.
+   * @param name   entity set.
+   * @param type   entity type.
    * @return entity set.
    */
   @GET
@@ -631,13 +631,12 @@ public class Services {
       }
 
       final String basePath = name + File.separatorChar;
-      final StringBuilder path = new StringBuilder(name).
-          append(File.separatorChar).append(type).
-          append(File.separatorChar);
+      final StringBuilder path = new StringBuilder(name).append(File.separatorChar).append(type)
+          .append(File.separatorChar);
 
       path.append(metadata.getEntitySet(name).isSingleton()
           ? Constants.get(ConstantKey.ENTITY)
-              : Constants.get(ConstantKey.FEED));
+          : Constants.get(ConstantKey.FEED));
 
       final InputStream feed = FSManager.instance().readFile(path.toString(), acceptType);
       return xml.createResponse(null, feed, Commons.getETag(basePath), acceptType);
@@ -689,20 +688,19 @@ public class Services {
         }
 
         if (StringUtils.isNotBlank(orderby)) {
-          builder.append(Constants.get(ConstantKey.ORDERBY)).append(File.separatorChar).
-          append(orderby).append(File.separatorChar);
+          builder.append(Constants.get(ConstantKey.ORDERBY)).append(File.separatorChar).append(orderby)
+              .append(File.separatorChar);
         }
 
         if (StringUtils.isNotBlank(filter)) {
-          builder.append(Constants.get(ConstantKey.FILTER)).append(File.separatorChar).
-          append(filter.replaceAll("/", "."));
+          builder.append(Constants.get(ConstantKey.FILTER)).append(File.separatorChar)
+              .append(filter.replaceAll("/", "."));
         } else if (StringUtils.isNotBlank(skiptoken)) {
-          builder.append(Constants.get(ConstantKey.SKIP_TOKEN)).append(File.separatorChar).
-          append(skiptoken);
+          builder.append(Constants.get(ConstantKey.SKIP_TOKEN)).append(File.separatorChar).append(skiptoken);
         } else {
           builder.append(metadata.getEntitySet(name).isSingleton()
               ? Constants.get(ConstantKey.ENTITY)
-                  : Constants.get(ConstantKey.FEED));
+              : Constants.get(ConstantKey.FEED));
         }
 
         final InputStream feed = FSManager.instance().readFile(builder.toString(), Accept.ATOM);
@@ -750,12 +748,12 @@ public class Services {
   /**
    * Retrieve entity set or function execution sample.
    *
-   * @param accept Accept header.
-   * @param name entity set or function name.
-   * @param format format query option.
-   * @param count count query option.
-   * @param filter filter query option.
-   * @param orderby orderby query option.
+   * @param accept    Accept header.
+   * @param name      entity set or function name.
+   * @param format    format query option.
+   * @param count     count query option.
+   * @param filter    filter query option.
+   * @param orderby   orderby query option.
    * @param skiptoken skiptoken query option.
    * @return entity set or function result.
    */
@@ -794,7 +792,7 @@ public class Services {
         if (utils.getKey() == Accept.JSON_FULLMETA || utils.getKey() == Accept.ATOM) {
           entity = utils.getValue().addOperation(entity, "Sack", "#DefaultContainer.Sack",
               uriInfo.getAbsolutePath().toASCIIString()
-              + "/Microsoft.Test.OData.Services.AstoriaDefaultService.SpecialEmployee/Sack");
+                  + "/Microsoft.Test.OData.Services.AstoriaDefaultService.SpecialEmployee/Sack");
         }
 
         return utils.getValue().createResponse(
@@ -884,12 +882,12 @@ public class Services {
   /**
    * Retrieve entity sample.
    *
-   * @param accept Accept header.
+   * @param accept        Accept header.
    * @param entitySetName Entity set name.
-   * @param entityId entity id.
-   * @param format format query option.
-   * @param expand expand query option.
-   * @param select select query option.
+   * @param entityId      entity id.
+   * @param format        format query option.
+   * @param expand        expand query option.
+   * @param select        select query option.
    * @return entity.
    */
   @GET
@@ -923,8 +921,8 @@ public class Services {
         throw new UnsupportedMediaTypeException("Unsupported media type");
       }
 
-      final Map.Entry<String, InputStream> entityInfo =
-          utils.getValue().readEntity(entitySetName, entityId, Accept.ATOM);
+      final Map.Entry<String, InputStream> entityInfo = utils.getValue().readEntity(entitySetName, entityId,
+          Accept.ATOM);
 
       final InputStream entity = entityInfo.getValue();
 
@@ -1057,11 +1055,11 @@ public class Services {
       @QueryParam("$orderby") @DefaultValue(StringUtils.EMPTY) final String orderby,
       @QueryParam("$skiptoken") @DefaultValue(StringUtils.EMPTY) final String skiptoken) {
 
-    return StringUtils.isBlank(filter) && StringUtils.isBlank(search) ?
-        NumberUtils.isNumber(type) ?
-            getEntityInternal(uriInfo.getRequestUri().toASCIIString(), accept, "People", type, format, null, null) :
-            getEntitySet(accept, "People", type) :
-        getEntitySet(uriInfo, accept, "People", top, skip, format, count, filter, orderby, skiptoken, type);
+    return StringUtils.isBlank(filter) && StringUtils.isBlank(search)
+        ? NumberUtils.isNumber(type)
+            ? getEntityInternal(uriInfo.getRequestUri().toASCIIString(), accept, "People", type, format, null, null)
+            : getEntitySet(accept, "People", type)
+        : getEntitySet(uriInfo, accept, "People", top, skip, format, count, filter, orderby, skiptoken, type);
   }
 
   @GET
@@ -1143,7 +1141,7 @@ public class Services {
           null,
           acceptType);
       if (StringUtils.isNotBlank(prefer)) {
-        response.getHeaders().put("Preference-Applied", Collections.<Object> singletonList(prefer));
+        response.getHeaders().put("Preference-Applied", Collections.<Object>singletonList(prefer));
       }
       return response;
     } catch (Exception e) {
@@ -1191,9 +1189,9 @@ public class Services {
           prop.setType(id.getValue().toString());
           prop.setValue(ValueType.PRIMITIVE,
               id.getValue() == EdmPrimitiveTypeKind.Int32
-              ? Integer.parseInt(entityKey)
+                  ? Integer.parseInt(entityKey)
                   : id.getValue() == EdmPrimitiveTypeKind.Guid
-                  ? UUID.fromString(entityKey)
+                      ? UUID.fromString(entityKey)
                       : entityKey);
           entry.getProperties().add(prop);
         }
@@ -1228,14 +1226,14 @@ public class Services {
       writer.flush();
       writer.close();
 
-      final InputStream serialization =
-          xml.addOrReplaceEntity(entityKey, entitySetName, new ByteArrayInputStream(content.toByteArray()), entry);
+      final InputStream serialization = xml.addOrReplaceEntity(entityKey, entitySetName,
+          new ByteArrayInputStream(content.toByteArray()), entry);
 
       ResWrap<Entity> result = atomDeserializer.toEntity(serialization);
       result = new ResWrap<Entity>(
           URI.create(Constants.get(ConstantKey.ODATA_METADATA_PREFIX)
               + entitySetName + Constants.get(ConstantKey.ODATA_METADATA_ENTITY_SUFFIX)),
-              null, result.getPayload());
+          null, result.getPayload());
 
       final String path = Commons.getEntityBasePath(entitySetName, entityKey);
       FSManager.instance().putInMemory(result, path + Constants.get(ConstantKey.ENTITY));
@@ -1273,7 +1271,7 @@ public class Services {
       }
 
       if (StringUtils.isNotBlank(prefer)) {
-        response.getHeaders().put("Preference-Applied", Collections.<Object> singletonList(prefer));
+        response.getHeaders().put("Preference-Applied", Collections.<Object>singletonList(prefer));
       }
 
       return response;
@@ -1300,7 +1298,7 @@ public class Services {
 
         alink.setType(navProperties.get(property.getName()).isEntitySet()
             ? Constants.get(ConstantKey.ATOM_LINK_FEED)
-                : Constants.get(ConstantKey.ATOM_LINK_ENTRY));
+            : Constants.get(ConstantKey.ATOM_LINK_ENTRY));
 
         alink.setRel(Constants.get(ConstantKey.ATOM_LINK_REL) + property.getName());
 
@@ -1356,7 +1354,7 @@ public class Services {
         link.setTitle(property.getKey());
         link.setType(property.getValue().isEntitySet()
             ? Constants.get(ConstantKey.ATOM_LINK_FEED)
-                : Constants.get(ConstantKey.ATOM_LINK_ENTRY));
+            : Constants.get(ConstantKey.ATOM_LINK_ENTRY));
         link.setRel(Constants.get(ConstantKey.ATOM_LINK_REL) + property.getKey());
         link.setHref(entitySetName + "(" + entityKey + ")/" + property.getKey());
         entry.getNavigationLinks().add(link);
@@ -1448,13 +1446,12 @@ public class Services {
       }
       final int n = tree.get("n").asInt();
 
-      final StringBuilder path = new StringBuilder(name).
-          append(File.separatorChar).append(type).
-          append(File.separatorChar);
+      final StringBuilder path = new StringBuilder(name).append(File.separatorChar).append(type)
+          .append(File.separatorChar);
 
       path.append(metadata.getEntitySet(name).isSingleton()
           ? Constants.get(ConstantKey.ENTITY)
-              : Constants.get(ConstantKey.FEED));
+          : Constants.get(ConstantKey.FEED));
 
       final InputStream feed = FSManager.instance().readFile(path.toString(), acceptType);
 
@@ -1465,15 +1462,14 @@ public class Services {
       String newContent = new String(copy.toByteArray(), "UTF-8");
       final Pattern salary = Pattern.compile(acceptType == Accept.ATOM
           ? "\\<d:Salary m:type=\"Edm.Int32\"\\>(-?\\d+)\\</d:Salary\\>"
-              : "\"Salary\":(-?\\d+),");
+          : "\"Salary\":(-?\\d+),");
       final Matcher salaryMatcher = salary.matcher(newContent);
       while (salaryMatcher.find()) {
         final Long newSalary = Long.valueOf(salaryMatcher.group(1)) + n;
-        newContent = newContent.
-            replaceAll("\"Salary\":" + salaryMatcher.group(1) + ",",
-                "\"Salary\":" + newSalary + ",").
-                replaceAll("\\<d:Salary m:type=\"Edm.Int32\"\\>" + salaryMatcher.group(1) + "</d:Salary\\>",
-                    "<d:Salary m:type=\"Edm.Int32\">" + newSalary + "</d:Salary>");
+        newContent = newContent.replaceAll("\"Salary\":" + salaryMatcher.group(1) + ",",
+            "\"Salary\":" + newSalary + ",")
+            .replaceAll("\\<d:Salary m:type=\"Edm.Int32\"\\>" + salaryMatcher.group(1) + "</d:Salary\\>",
+                "<d:Salary m:type=\"Edm.Int32\">" + newSalary + "</d:Salary>");
       }
 
       FSManager.instance().putInMemory(IOUtils.toInputStream(newContent, Constants.ENCODING),
@@ -1620,7 +1616,8 @@ public class Services {
       link.setRel("edit");
       link.setHref(URI.create(
           Constants.get(ConstantKey.DEFAULT_SERVICE_URL)
-              + "ProductDetails(ProductID=6,ProductDetailID=1)").toASCIIString());
+              + "ProductDetails(ProductID=6,ProductDetailID=1)")
+          .toASCIIString());
       entry.setEditLink(link);
 
       final EntityCollection feed = new EntityCollection();
@@ -1793,7 +1790,7 @@ public class Services {
    * Retrieve entity reference sample.
    *
    * @param accept Accept header.
-   * @param path path.
+   * @param path   path.
    * @param format format query option.
    * @return entity reference or feed of entity reference.
    */
@@ -1922,7 +1919,7 @@ public class Services {
       }
 
       if (StringUtils.isNotBlank(prefer)) {
-        response.getHeaders().put("Preference-Applied", Collections.<Object> singletonList(prefer));
+        response.getHeaders().put("Preference-Applied", Collections.<Object>singletonList(prefer));
       }
 
       return response;
@@ -1945,12 +1942,10 @@ public class Services {
       @PathParam("entityId") final String entityId,
       final String changes) {
 
-    final Response response =
-        getEntityInternal(uriInfo.getRequestUri().toASCIIString(),
-            accept, entitySetName, entityId, accept, StringUtils.EMPTY, StringUtils.EMPTY);
-    return response.getStatus() >= 400 ?
-        postNewEntity(uriInfo, accept, contentType, prefer, entitySetName, changes) :
-        patchEntityInternal(uriInfo, accept, contentType, prefer, ifMatch, entitySetName, entityId, changes);
+    final Response response = getEntityInternal(uriInfo.getRequestUri().toASCIIString(),
+        accept, entitySetName, entityId, accept, StringUtils.EMPTY, StringUtils.EMPTY);
+    return response.getStatus() >= 400 ? postNewEntity(uriInfo, accept, contentType, prefer, entitySetName, changes)
+        : patchEntityInternal(uriInfo, accept, contentType, prefer, ifMatch, entitySetName, entityId, changes);
   }
 
   private Response replaceEntity(final UriInfo uriInfo,
@@ -1998,7 +1993,7 @@ public class Services {
       }
 
       if (StringUtils.isNotBlank(prefer)) {
-        response.getHeaders().put("Preference-Applied", Collections.<Object> singletonList(prefer));
+        response.getHeaders().put("Preference-Applied", Collections.<Object>singletonList(prefer));
       }
 
       return response;
@@ -2030,10 +2025,8 @@ public class Services {
   }
 
   private StringBuilder containedPath(final String entityId, final String containedEntitySetName) {
-    return new StringBuilder("Accounts").append(File.separatorChar).
-        append(entityId).append(File.separatorChar).
-        append("links").append(File.separatorChar).
-        append(containedEntitySetName);
+    return new StringBuilder("Accounts").append(File.separatorChar).append(entityId).append(File.separatorChar)
+        .append("links").append(File.separatorChar).append(containedEntitySetName);
   }
 
   @DELETE
@@ -2124,7 +2117,7 @@ public class Services {
       }
 
       if (StringUtils.isNotBlank(prefer)) {
-        response.getHeaders().put("Preference-Applied", Collections.<Object> singletonList(prefer));
+        response.getHeaders().put("Preference-Applied", Collections.<Object>singletonList(prefer));
       }
 
       return response;
@@ -2168,7 +2161,7 @@ public class Services {
       }
 
       if (StringUtils.isNotBlank(prefer)) {
-        response.getHeaders().put("Preference-Applied", Collections.<Object> singletonList(prefer));
+        response.getHeaders().put("Preference-Applied", Collections.<Object>singletonList(prefer));
       }
 
       return response;
@@ -2262,7 +2255,7 @@ public class Services {
       }
 
       if (StringUtils.isNotBlank(prefer)) {
-        response.getHeaders().put("Preference-Applied", Collections.<Object> singletonList(prefer));
+        response.getHeaders().put("Preference-Applied", Collections.<Object>singletonList(prefer));
       }
 
       return response;
@@ -2327,7 +2320,7 @@ public class Services {
       }
 
       if (StringUtils.isNotBlank(prefer)) {
-        response.getHeaders().put("Preference-Applied", Collections.<Object> singletonList(prefer));
+        response.getHeaders().put("Preference-Applied", Collections.<Object>singletonList(prefer));
       }
 
       return response;
@@ -2362,11 +2355,11 @@ public class Services {
   /**
    * Retrieve property sample.
    *
-   * @param accept Accept header.
+   * @param accept        Accept header.
    * @param entitySetName Entity set name.
-   * @param entityId entity id.
-   * @param path path.
-   * @param format format query option.
+   * @param entityId      entity id.
+   * @param path          path.
+   * @param format        format query option.
    * @return property.
    */
   @GET
@@ -2395,11 +2388,11 @@ public class Services {
   /**
    * Retrieve property sample.
    *
-   * @param accept Accept header.
+   * @param accept        Accept header.
    * @param entitySetName Entity set name.
-   * @param entityId entity id.
-   * @param path path.
-   * @param format format query option.
+   * @param entityId      entity id.
+   * @param path          path.
+   * @param format        format query option.
    * @return property.
    */
   @GET
@@ -2433,8 +2426,8 @@ public class Services {
           final ByteArrayOutputStream content = new ByteArrayOutputStream();
           final OutputStreamWriter writer = new OutputStreamWriter(content, Constants.ENCODING);
 
-          final ResWrap<?> container = linkInfo.isFeed() ? atomDeserializer.toEntitySet(stream) : atomDeserializer.
-              toEntity(stream);
+          final ResWrap<?> container = linkInfo.isFeed() ? atomDeserializer.toEntitySet(stream)
+              : atomDeserializer.toEntity(stream);
           if (acceptType == Accept.ATOM) {
             atomSerializer.write(writer, container);
           } else {
@@ -2515,9 +2508,9 @@ public class Services {
     return xml.createResponse(null,
         searchForValue ? IOUtils.toInputStream(
             container.getPayload().isNull() ? StringUtils.EMPTY : stringValue(container.getPayload()),
-                Constants.ENCODING) : utils.writeProperty(acceptType, container),
-                Commons.getETag(Commons.getEntityBasePath(entitySetName, entityId)),
-                acceptType);
+            Constants.ENCODING) : utils.writeProperty(acceptType, container),
+        Commons.getETag(Commons.getEntityBasePath(entitySetName, entityId)),
+        acceptType);
   }
 
   private String stringValue(final Property property) {
@@ -2535,7 +2528,7 @@ public class Services {
   /**
    * Count sample.
    *
-   * @param accept Accept header.
+   * @param accept        Accept header.
    * @param entitySetName entity set name.
    * @return count.
    */
@@ -2636,14 +2629,15 @@ public class Services {
             entry);
       }
 
-      final EdmTypeInfo contained = new EdmTypeInfo.Builder().setTypeExpression(metadata.
-          getNavigationProperties("Accounts").get(containedEntitySetName).getType()).build();
-      final String entityKey = getUtilities(contentTypeValue).
-          getDefaultEntryKey(contained.getFullQualifiedName().getName(), entry);
+      final EdmTypeInfo contained = new EdmTypeInfo.Builder()
+          .setTypeExpression(metadata.getNavigationProperties("Accounts").get(containedEntitySetName).getType())
+          .build();
+      final String entityKey = getUtilities(contentTypeValue)
+          .getDefaultEntryKey(contained.getFullQualifiedName().getName(), entry);
 
       // 2. Store the new entity
-      final String atomEntryRelativePath = containedPath(entityId, containedEntitySetName).
-          append('(').append(entityKey).append(')').toString();
+      final String atomEntryRelativePath = containedPath(entityId, containedEntitySetName).append('(').append(entityKey)
+          .append(')').toString();
       FSManager.instance().putInMemory(
           utils.writeEntity(Accept.ATOM, entryContainer),
           FSManager.instance().getAbsolutePath(atomEntryRelativePath, Accept.ATOM));
@@ -2718,8 +2712,8 @@ public class Services {
         entryChanges = container.getPayload();
       } else {
         final String entityType = metadata.getEntitySet(entitySetName).getType();
-        final String containedType = metadata.getEntityOrComplexType(entityType).
-            getNavigationProperty(containedEntitySetName).getType();
+        final String containedType = metadata.getEntityOrComplexType(entityType)
+            .getNavigationProperty(containedEntitySetName).getType();
         final EdmTypeInfo typeInfo = new EdmTypeInfo.Builder().setTypeExpression(containedType).build();
 
         final ResWrap<Entity> jsonContainer = jsonDeserializer.toEntity(
@@ -2754,14 +2748,14 @@ public class Services {
 
     try {
       // 1. Fetch the contained entity to be removed
-      final InputStream entry = FSManager.instance().
-          readFile(containedPath(entityId, containedEntitySetName).
-              append('(').append(containedEntityId).append(')').toString(), Accept.ATOM);
+      final InputStream entry = FSManager.instance().readFile(
+          containedPath(entityId, containedEntitySetName).append('(').append(containedEntityId).append(')').toString(),
+          Accept.ATOM);
       final ResWrap<Entity> container = atomDeserializer.toEntity(entry);
 
       // 2. Remove the contained entity
-      final String atomEntryRelativePath = containedPath(entityId, containedEntitySetName).
-          append('(').append(containedEntityId).append(')').toString();
+      final String atomEntryRelativePath = containedPath(entityId, containedEntitySetName).append('(')
+          .append(containedEntityId).append(')').toString();
       FSManager.instance().deleteFile(atomEntryRelativePath);
 
       // 3. Update the contained entity set
@@ -2817,8 +2811,8 @@ public class Services {
         derivedType = parts[1];
       }
 
-      final InputStream feed = FSManager.instance().
-          readFile(containedPath(entityId, tempContainedESName).toString(), Accept.ATOM);
+      final InputStream feed = FSManager.instance().readFile(containedPath(entityId, tempContainedESName).toString(),
+          Accept.ATOM);
 
       final ResWrap<EntityCollection> container = atomDeserializer.toEntitySet(feed);
 

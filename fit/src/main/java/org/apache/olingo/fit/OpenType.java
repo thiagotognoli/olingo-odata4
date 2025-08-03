@@ -48,8 +48,8 @@ public class OpenType extends Services {
 
   private Response replaceServiceName(final Response response) {
     try {
-      final String content = IOUtils.toString((InputStream) response.getEntity(), Constants.ENCODING).
-          replaceAll("Static\\.svc", "OpenType.svc");
+      final String content = IOUtils.toString((InputStream) response.getEntity(), Constants.ENCODING)
+          .replaceAll("Static\\.svc", "OpenType.svc");
 
       final Response.ResponseBuilder builder = Response.status(response.getStatus());
       for (String headerName : response.getHeaders().keySet()) {

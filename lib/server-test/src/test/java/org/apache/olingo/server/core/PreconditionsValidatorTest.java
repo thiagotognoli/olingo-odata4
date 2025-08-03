@@ -49,9 +49,10 @@ public class PreconditionsValidatorTest {
 
   private static final OData odata = OData.newInstance();
   private static final Edm edm = odata.createServiceMetadata(
-      new EdmTechProvider(), Collections.<EdmxReference> emptyList()).getEdm();
+      new EdmTechProvider(), Collections.<EdmxReference>emptyList()).getEdm();
 
-  // -------------- POSITIVE TESTS --------------------------------------------------------------------------------
+  // -------------- POSITIVE TESTS
+  // --------------------------------------------------------------------------------
 
   @Test
   public void simpleEntity() throws Exception {
@@ -148,7 +149,8 @@ public class PreconditionsValidatorTest {
     assertFalse(new PreconditionsValidator(uriInfo).mustValidatePreconditions(support, true));
   }
 
-  // -------------- IGNORE VALIDATION TESTS -----------------------------------------------------------------------
+  // -------------- IGNORE VALIDATION TESTS
+  // -----------------------------------------------------------------------
 
   @Test
   public void entitySetMustBeIgnored() throws Exception {
@@ -204,7 +206,8 @@ public class PreconditionsValidatorTest {
           assertEquals(entitySetName, ((EdmBindingTarget) invocation.getArguments()[0]).getName());
         }
         return true;
-      }};
+      }
+    };
     when(support.hasETag(any(EdmBindingTarget.class))).thenAnswer(answer);
     when(support.hasMediaETag(any(EdmBindingTarget.class))).thenAnswer(answer);
 

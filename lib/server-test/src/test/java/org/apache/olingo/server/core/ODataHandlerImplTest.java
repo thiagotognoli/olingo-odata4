@@ -54,8 +54,6 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-;
-
 public class ODataHandlerImplTest {
 
   private static final String BASE_URI = "http://localhost/odata";
@@ -75,8 +73,8 @@ public class ODataHandlerImplTest {
     // We support HEAD now too
     final ServiceDocumentProcessor processor2 = mock(ServiceDocumentProcessor.class);
     doThrow(new ODataApplicationException("msg", 100, Locale.ENGLISH)).when(processor2)
-    .readServiceDocument(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
-        any(ContentType.class));
+        .readServiceDocument(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
+            any(ContentType.class));
     final ODataResponse response2 = dispatch(HttpMethod.HEAD, "/", processor2);
     assertEquals(HttpStatusCode.CONTINUE.getStatusCode(), response2.getStatusCode());
 
@@ -103,7 +101,7 @@ public class ODataHandlerImplTest {
 
     assertThat(doc, containsString("\"@odata.context\":\"$metadata\""));
     assertThat(doc, containsString("\"value\":"));
-    
+
     final ODataResponse response2 = dispatch(HttpMethod.HEAD, "/", null);
     assertEquals(HttpStatusCode.OK.getStatusCode(), response2.getStatusCode());
     assertNull(response2.getHeader(HttpHeader.CONTENT_TYPE));
@@ -115,7 +113,7 @@ public class ODataHandlerImplTest {
     final ODataResponse response = dispatch(HttpMethod.GET, "", null);
     assertEquals(HttpStatusCode.TEMPORARY_REDIRECT.getStatusCode(), response.getStatusCode());
     assertEquals(BASE_URI + "/", response.getHeader(HttpHeader.LOCATION));
-    
+
     final ODataResponse responseHead = dispatch(HttpMethod.HEAD, "", null);
     assertEquals(HttpStatusCode.TEMPORARY_REDIRECT.getStatusCode(), responseHead.getStatusCode());
     assertEquals(BASE_URI + "/", responseHead.getHeader(HttpHeader.LOCATION));
@@ -125,19 +123,19 @@ public class ODataHandlerImplTest {
   public void metadataNonDefault() throws Exception {
     final MetadataProcessor processor = mock(MetadataProcessor.class);
     doThrow(new ODataApplicationException("msg", 100, Locale.ENGLISH)).when(processor)
-    .readMetadata(
-        any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
+        .readMetadata(
+            any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
     final ODataResponse response = dispatch(HttpMethod.GET, "$metadata", processor);
     assertEquals(HttpStatusCode.CONTINUE.getStatusCode(), response.getStatusCode());
 
     verify(processor).readMetadata(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
-    
+
     // We support HEAD now too
     final MetadataProcessor processor2 = mock(MetadataProcessor.class);
     doThrow(new ODataApplicationException("msg", 100, Locale.ENGLISH)).when(processor2)
-    .readMetadata(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
-        any(ContentType.class));
+        .readMetadata(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
+            any(ContentType.class));
     final ODataResponse response2 = dispatch(HttpMethod.HEAD, "$metadata", processor2);
     assertEquals(HttpStatusCode.CONTINUE.getStatusCode(), response2.getStatusCode());
 
@@ -159,7 +157,7 @@ public class ODataHandlerImplTest {
     assertNotNull(response.getContent());
     assertThat(IOUtils.toString(response.getContent()),
         containsString("<edmx:Edmx Version=\"4.0\""));
-    
+
     final ODataResponse response2 = dispatch(HttpMethod.HEAD, "$metadata", null);
     assertEquals(HttpStatusCode.OK.getStatusCode(), response2.getStatusCode());
     assertNull(response2.getHeader(HttpHeader.CONTENT_TYPE));
@@ -289,15 +287,15 @@ public class ODataHandlerImplTest {
     final String LOCALIZED_MESSAGE = "localized message";
     MetadataProcessor processor = mock(MetadataProcessor.class);
 
-    ODataApplicationException oDataApplicationException =
-        new ODataApplicationException(ORIGINAL_MESSAGE, 425, Locale.ENGLISH, ODATA_ERRORCODE) {
-          private static final long serialVersionUID = 1L;
+    ODataApplicationException oDataApplicationException = new ODataApplicationException(ORIGINAL_MESSAGE, 425,
+        Locale.ENGLISH, ODATA_ERRORCODE) {
+      private static final long serialVersionUID = 1L;
 
-          @Override
-          public String getLocalizedMessage() {
-            return LOCALIZED_MESSAGE;
-          }
-        };
+      @Override
+      public String getLocalizedMessage() {
+        return LOCALIZED_MESSAGE;
+      }
+    };
 
     doThrow(oDataApplicationException).when(processor).readMetadata(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
@@ -333,18 +331,18 @@ public class ODataHandlerImplTest {
             throw new ODataException("msg");
           }
         },
-        Collections.<EdmxReference> emptyList());
+        Collections.<EdmxReference>emptyList());
 
     ODataRequest request = new ODataRequest();
     request.setMethod(HttpMethod.GET);
     request.setRawODataPath("EdmException");
 
-    final ODataResponse response =
-        new ODataHandlerImpl(odata, serviceMetadata, new ServerCoreDebugger(odata)).process(request);
+    final ODataResponse response = new ODataHandlerImpl(odata, serviceMetadata, new ServerCoreDebugger(odata))
+        .process(request);
     assertNotNull(response);
     assertEquals(HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatusCode());
   }
-  
+
   @Test
   public void handlerExtTest() throws Exception {
     final OData odata = OData.newInstance();
@@ -356,13 +354,13 @@ public class ODataHandlerImplTest {
             throw new ODataException("msg");
           }
         },
-        Collections.<EdmxReference> emptyList());
+        Collections.<EdmxReference>emptyList());
 
     ODataRequest request = new ODataRequest();
     request.setMethod(HttpMethod.GET);
     request.setRawODataPath("EdmException");
-    ODataHandlerImpl handler =  new ODataHandlerImpl(odata, serviceMetadata, new ServerCoreDebugger(odata));
-    Processor extension =  new TechnicalActionProcessor(null, serviceMetadata);
+    ODataHandlerImpl handler = new ODataHandlerImpl(odata, serviceMetadata, new ServerCoreDebugger(odata));
+    Processor extension = new TechnicalActionProcessor(null, serviceMetadata);
     handler.register(extension);
     assertNull(handler.getLastThrownException());
     assertNull(handler.getUriInfo());
@@ -619,12 +617,11 @@ public class ODataHandlerImplTest {
     dispatchMethodNotAllowed(HttpMethod.HEAD, uri, processor);
   }
 
-
   @Test
   public void dispatchSingleton() throws Exception {
     final String uri = "SI";
     final EntityProcessor processor = mock(EntityProcessor.class);
-    
+
     dispatch(HttpMethod.GET, uri, processor);
     verify(processor).readEntity(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
@@ -642,12 +639,12 @@ public class ODataHandlerImplTest {
     dispatchMethodNotAllowed(HttpMethod.POST, uri, processor);
     dispatchMethodNotAllowed(HttpMethod.DELETE, uri, processor);
   }
-  
+
   @Test
   public void dispatchSingletonMedia() throws Exception {
     final String uri = "SIMedia/$value";
     final MediaEntityProcessor processor = mock(MediaEntityProcessor.class);
-    
+
     dispatch(HttpMethod.GET, uri, processor);
     verify(processor).readMediaEntity(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
@@ -661,7 +658,7 @@ public class ODataHandlerImplTest {
     dispatchMethodNotAllowed(HttpMethod.POST, uri, processor);
     dispatchMethodNotAllowed(HttpMethod.DELETE, uri, processor);
   }
-  
+
   @Test
   public void dispatchSingletonNavigation() throws Exception {
     final String uri = "SINav/NavPropertyETTwoKeyNavOne";
@@ -669,7 +666,7 @@ public class ODataHandlerImplTest {
     final String sigletonManyNavUri = "SINav/NavPropertyETTwoKeyNavMany";
     final EntityProcessor processor = mock(EntityProcessor.class);
     final EntityCollectionProcessor collectionProcessor = mock(EntityCollectionProcessor.class);
-    
+
     dispatch(HttpMethod.GET, sigletonNavUri, processor);
     verify(processor).readEntity(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
@@ -686,13 +683,13 @@ public class ODataHandlerImplTest {
 
     dispatchMethodNotAllowed(HttpMethod.POST, sigletonNavUri, processor);
     dispatchMethodNotAllowed(HttpMethod.DELETE, sigletonNavUri, processor);
-    
+
     dispatch(HttpMethod.GET, uri, processor);
     verify(processor, times(2)).readEntity(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
 
     dispatch(HttpMethod.PATCH, uri, processor);
-    verify(processor,  times(3)).updateEntity(
+    verify(processor, times(3)).updateEntity(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class),
         any(ContentType.class));
 
@@ -700,31 +697,29 @@ public class ODataHandlerImplTest {
     verify(processor, times(4)).updateEntity(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class),
         any(ContentType.class));
-    
+
     dispatchMethodNotAllowed(HttpMethod.POST, uri, processor);
 
     dispatch(HttpMethod.DELETE, uri, processor);
     verify(processor).deleteEntity(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class));
-    
-    
+
     dispatch(HttpMethod.GET, sigletonManyNavUri, collectionProcessor);
     verify(collectionProcessor).readEntityCollection(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class));
-    
+
     dispatchMethodNotAllowed(HttpMethod.PATCH, sigletonManyNavUri, processor);
-    
+
     dispatch(HttpMethod.PUT, sigletonManyNavUri, processor);
-    
+
     dispatch(HttpMethod.POST, sigletonManyNavUri, processor);
     verify(processor).createEntity(
         any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class), any(ContentType.class),
         any(ContentType.class));
 
-
     dispatchMethodNotAllowed(HttpMethod.DELETE, sigletonManyNavUri, processor);
   }
-  
+
   @Test
   public void dispatchMedia() throws Exception {
     final String uri = "ESMedia(1)/$value";
@@ -766,7 +761,7 @@ public class ODataHandlerImplTest {
 
     dispatch(HttpMethod.DELETE, uri, processor);
     verifyNoInteractions(processor);
-    
+
     dispatch(HttpMethod.HEAD, uri, processor);
     verifyNoInteractions(processor);
   }
@@ -774,7 +769,8 @@ public class ODataHandlerImplTest {
   @Test
   public void dispatchMediaWithNavigation() throws Exception {
     /*
-     * In Java we decided that any kind of navigation will be accepted. This means that a $value on a media resource
+     * In Java we decided that any kind of navigation will be accepted. This means
+     * that a $value on a media resource
      * must be dispatched as well
      */
     final String uri = "ESKeyNav(1)/NavPropertyETMediaOne/$value";
@@ -992,11 +988,11 @@ public class ODataHandlerImplTest {
 
     dispatch(HttpMethod.DELETE, uriMany, "$id=ESTwoPrim(1)", null, null, processor);
     verify(processor).deleteReference(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class));
-    
-    dispatchMethodNotAllowed(HttpMethod.HEAD, uri, processor);    
-    
-    //singleton URIs
-    
+
+    dispatchMethodNotAllowed(HttpMethod.HEAD, uri, processor);
+
+    // singleton URIs
+
     dispatch(HttpMethod.GET, singletonUri, processor);
     verify(processor, times(2)).readReference(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
         any(ContentType.class));
@@ -1009,8 +1005,8 @@ public class ODataHandlerImplTest {
     verify(processor, times(4)).updateReference(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
         any(ContentType.class));
 
-    dispatchMethodNotAllowed(HttpMethod.POST, singletonUri, processor); 
-    
+    dispatchMethodNotAllowed(HttpMethod.POST, singletonUri, processor);
+
     dispatch(HttpMethod.GET, singleUri, processor);
     verify(processor, times(3)).readReference(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
         any(ContentType.class));
@@ -1023,15 +1019,15 @@ public class ODataHandlerImplTest {
     verify(processor, times(6)).updateReference(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
         any(ContentType.class));
 
-    dispatchMethodNotAllowed(HttpMethod.POST, singleUri, processor); 
-    
+    dispatchMethodNotAllowed(HttpMethod.POST, singleUri, processor);
+
     dispatch(HttpMethod.POST, singletonUriMany, processor);
     verify(processor, times(2)).createReference(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class),
         any(ContentType.class));
 
     dispatch(HttpMethod.DELETE, singletonUriMany, "$id=ESTwoPrim(1)", null, null, processor);
     verify(processor, times(2)).deleteReference(any(ODataRequest.class), any(ODataResponse.class), any(UriInfo.class));
-    
+
     dispatchMethodNotAllowed(HttpMethod.HEAD, singletonUriMany, processor);
   }
 
@@ -1047,11 +1043,11 @@ public class ODataHandlerImplTest {
 
     dispatchMethodNotAllowed(HttpMethod.PATCH, uri, processor);
     dispatchMethodNotAllowed(HttpMethod.PUT, uri, processor);
-    dispatchMethodNotAllowed(HttpMethod.HEAD, uri, processor); 
-    
-    //singleton ref
+    dispatchMethodNotAllowed(HttpMethod.HEAD, uri, processor);
+
+    // singleton ref
     dispatch(HttpMethod.GET, singletonUri, processor);
-    verify(processor, times(2)).readReferenceCollection(any(ODataRequest.class), 
+    verify(processor, times(2)).readReferenceCollection(any(ODataRequest.class),
         any(ODataResponse.class), any(UriInfo.class),
         any(ContentType.class));
 
@@ -1110,7 +1106,7 @@ public class ODataHandlerImplTest {
 
     final OData odata = OData.newInstance();
     final ServiceMetadata metadata = odata.createServiceMetadata(
-        new EdmTechProvider(), Collections.<EdmxReference> emptyList());
+        new EdmTechProvider(), Collections.<EdmxReference>emptyList());
 
     ODataHandlerImpl handler = new ODataHandlerImpl(odata, metadata, new ServerCoreDebugger(odata));
 
@@ -1127,7 +1123,7 @@ public class ODataHandlerImplTest {
   public void dispatchEmptyContentWithoutContentType() {
     final String path = "ESAllPrim";
     final EntityCollectionProcessor processor = mock(EntityCollectionProcessor.class);
-    
+
     ODataRequest request = new ODataRequest();
     request.setMethod(HttpMethod.POST);
     request.setRawBaseUri(BASE_URI);
@@ -1137,7 +1133,7 @@ public class ODataHandlerImplTest {
 
     final OData odata = OData.newInstance();
     final ServiceMetadata metadata = odata.createServiceMetadata(
-        new EdmTechProvider(), Collections.<EdmxReference> emptyList());
+        new EdmTechProvider(), Collections.<EdmxReference>emptyList());
 
     ODataHandlerImpl handler = new ODataHandlerImpl(odata, metadata, new ServerCoreDebugger(odata));
 
@@ -1148,7 +1144,7 @@ public class ODataHandlerImplTest {
     final ODataResponse response = handler.process(request);
     assertNotNull(response);
   }
-  
+
   private ODataResponse dispatch(final HttpMethod method, final String path, final Processor processor) {
     return dispatch(method, path, null, null, null, processor);
   }
@@ -1165,7 +1161,7 @@ public class ODataHandlerImplTest {
     assertEquals(statusCode.getStatusCode(), response.getStatusCode());
     assertNotNull(response.getContent());
   }
-  
+
   @Test
   public void validateInvalidOdataVersion1() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1173,15 +1169,14 @@ public class ODataHandlerImplTest {
 
     final Map<String, String> header = new HashMap<String, String>();
     header.put(HttpHeader.ODATA_VERSION, "3.0");
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, header, processor);
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, header, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
     assertEquals(400, response.getStatusCode());
     assertNotNull(response.getContent());
     String doc = IOUtils.toString(response.getContent());
     assertTrue(doc.contains("OData version '3.0' is not supported."));
   }
-  
+
   @Test
   public void validateInvalidOdataVersion2() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1189,16 +1184,15 @@ public class ODataHandlerImplTest {
 
     final Map<String, String> header = new HashMap<String, String>();
     header.put(HttpHeader.ODATA_VERSION, "5.0");
-    
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, header, processor);
+
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, header, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
     assertEquals(400, response.getStatusCode());
     assertNotNull(response.getContent());
     String doc = IOUtils.toString(response.getContent());
     assertTrue(doc.contains("OData version '5.0' is not supported."));
   }
-  
+
   @Test
   public void validateInvalidOdataMaxVersion1() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1206,16 +1200,15 @@ public class ODataHandlerImplTest {
 
     final Map<String, String> header = new HashMap<String, String>();
     header.put(HttpHeader.ODATA_MAX_VERSION, "3.0");
-    
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, header, processor);
+
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, header, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
     assertEquals(400, response.getStatusCode());
     assertNotNull(response.getContent());
     String doc = IOUtils.toString(response.getContent());
     assertTrue(doc.contains("OData version '3.0' is not supported."));
   }
-  
+
   @Test
   public void validateValidOdataMaxVersion2() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1223,12 +1216,11 @@ public class ODataHandlerImplTest {
 
     final Map<String, String> header = new HashMap<String, String>();
     header.put(HttpHeader.ODATA_MAX_VERSION, "5.0");
-    
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, header, processor);
+
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, header, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
   }
-  
+
   @Test
   public void validateValidOdataVersionAndMaxVersion1() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1237,12 +1229,11 @@ public class ODataHandlerImplTest {
     final Map<String, String> headers = new HashMap<String, String>();
     headers.put(HttpHeader.ODATA_VERSION, "4.0");
     headers.put(HttpHeader.ODATA_MAX_VERSION, "5.0");
-    
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, headers, processor);
+
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, headers, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
   }
-  
+
   @Test
   public void validateInvalidOdataVersionAndMaxVersion2() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1251,16 +1242,15 @@ public class ODataHandlerImplTest {
     final Map<String, String> headers = new HashMap<String, String>();
     headers.put(HttpHeader.ODATA_VERSION, "3.0");
     headers.put(HttpHeader.ODATA_MAX_VERSION, "4.0");
-    
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, headers, processor);
+
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, headers, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
     assertEquals(400, response.getStatusCode());
     assertNotNull(response.getContent());
     String doc = IOUtils.toString(response.getContent());
     assertTrue(doc.contains("OData version '3.0' is not supported."));
   }
-  
+
   @Test
   public void validateInvalidOdataVersionAndMaxVersion3() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1269,16 +1259,15 @@ public class ODataHandlerImplTest {
     final Map<String, String> headers = new HashMap<String, String>();
     headers.put(HttpHeader.ODATA_VERSION, "5.0");
     headers.put(HttpHeader.ODATA_MAX_VERSION, "5.0");
-    
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, headers, processor);
+
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, headers, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
     assertEquals(400, response.getStatusCode());
     assertNotNull(response.getContent());
     String doc = IOUtils.toString(response.getContent());
     assertTrue(doc.contains("OData version '5.0' is not supported."));
   }
-  
+
   @Test
   public void validateValidOdataVersionAndMaxVersion2() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1287,12 +1276,11 @@ public class ODataHandlerImplTest {
     final Map<String, String> headers = new HashMap<String, String>();
     headers.put(HttpHeader.ODATA_VERSION, "4.0");
     headers.put(HttpHeader.ODATA_MAX_VERSION, "4.01");
-    
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, headers, processor);
+
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, headers, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
   }
-  
+
   @Test
   public void validateValidOdataVersionAndMaxVersion3() throws Exception {
     final String uri = "ESAllPrim(0)";
@@ -1301,12 +1289,11 @@ public class ODataHandlerImplTest {
     final Map<String, String> headers = new HashMap<String, String>();
     headers.put(HttpHeader.ODATA_VERSION, "4.0");
     headers.put(HttpHeader.ODATA_MAX_VERSION, "4.0");
-    
-    final ODataResponse response = dispatchToValidateHeaders
-        (HttpMethod.GET, uri, null, headers, processor);
+
+    final ODataResponse response = dispatchToValidateHeaders(HttpMethod.GET, uri, null, headers, processor);
     assertEquals("4.0", response.getHeader(HttpHeader.ODATA_VERSION));
   }
-  
+
   private ODataResponse dispatchToValidateHeaders(final HttpMethod method, final String path, final String query,
       final Map<String, String> headers, final Processor processor) throws ODataHandlerException {
     ODataRequest request = new ODataRequest();
@@ -1323,7 +1310,7 @@ public class ODataHandlerImplTest {
 
     final OData odata = OData.newInstance();
     final ServiceMetadata metadata = odata.createServiceMetadata(
-        new EdmTechProvider(), Collections.<EdmxReference> emptyList());
+        new EdmTechProvider(), Collections.<EdmxReference>emptyList());
 
     ODataHandlerImpl handler = new ODataHandlerImpl(odata, metadata, new ServerCoreDebugger(odata));
 

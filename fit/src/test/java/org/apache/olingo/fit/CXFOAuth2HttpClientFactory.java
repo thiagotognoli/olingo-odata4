@@ -49,8 +49,7 @@ import java.net.URI;
 
 public class CXFOAuth2HttpClientFactory extends AbstractOAuth2HttpClientFactory {
 
-  private static final Consumer OAUTH2_CONSUMER =
-          new Consumer(OAuth2Provider.CLIENT_ID, OAuth2Provider.CLIENT_SECRET);
+  private static final Consumer OAUTH2_CONSUMER = new Consumer(OAuth2Provider.CLIENT_ID, OAuth2Provider.CLIENT_SECRET);
 
   private ClientAccessToken accessToken;
 
@@ -63,8 +62,8 @@ public class CXFOAuth2HttpClientFactory extends AbstractOAuth2HttpClientFactory 
     bean.setAddress(oauth2TokenServiceURI.toASCIIString());
     bean.setUsername("odatajclient");
     bean.setPassword("odatajclient");
-    return bean.createWebClient().
-            type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON_TYPE);
+    return bean.createWebClient().type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+        .accept(MediaType.APPLICATION_JSON_TYPE);
   }
 
   @Override
@@ -75,11 +74,11 @@ public class CXFOAuth2HttpClientFactory extends AbstractOAuth2HttpClientFactory 
   @Override
   protected void init() throws OAuth2Exception {
     final URI authURI = OAuthClientUtils.getAuthorizationURI(
-            oauth2GrantServiceURI.toASCIIString(),
-            OAuth2Provider.CLIENT_ID,
-            OAuth2Provider.REDIRECT_URI,
-            null,
-            "foo bar");
+        oauth2GrantServiceURI.toASCIIString(),
+        OAuth2Provider.CLIENT_ID,
+        OAuth2Provider.REDIRECT_URI,
+        null,
+        "foo bar");
 
     // Disable automatic redirects handling
     final HttpParams params = new BasicHttpParams();
@@ -94,7 +93,8 @@ public class CXFOAuth2HttpClientFactory extends AbstractOAuth2HttpClientFactory 
       method.addHeader("Authorization", "Basic " + Base64.encodeBase64String("odatajclient:odatajclient".getBytes()));
       final HttpResponse response = httpClient.execute(method);
 
-      // 2. Pull out OAuth2 authorization data and "authenticity" cookie (CXF specific)
+      // 2. Pull out OAuth2 authorization data and "authenticity" cookie (CXF
+      // specific)
       oAuthAuthorizationData = new XmlMapper().readTree(EntityUtils.toString(response.getEntity()));
 
       final Header setCookieHeader = response.getFirstHeader("Set-Cookie");
@@ -109,13 +109,11 @@ public class CXFOAuth2HttpClientFactory extends AbstractOAuth2HttpClientFactory 
     String code = null;
     try {
       // 3. Submit the HTTP form for allowing access to the application
-      final URI location = new URIBuilder(oAuthAuthorizationData.get("replyTo").asText()).
-              addParameter("session_authenticity_token", oAuthAuthorizationData.get("authenticityToken").asText()).
-              addParameter("client_id", oAuthAuthorizationData.get("clientId").asText()).
-              addParameter("redirect_uri", oAuthAuthorizationData.get("redirectUri").asText()).
-              addParameter("oauthDecision", "allow").
-              addParameter("scope", "foo bar").
-              build();
+      final URI location = new URIBuilder(oAuthAuthorizationData.get("replyTo").asText())
+          .addParameter("session_authenticity_token", oAuthAuthorizationData.get("authenticityToken").asText())
+          .addParameter("client_id", oAuthAuthorizationData.get("clientId").asText())
+          .addParameter("redirect_uri", oAuthAuthorizationData.get("redirectUri").asText())
+          .addParameter("oauthDecision", "allow").addParameter("scope", "foo bar").build();
       final HttpGet method = new HttpGet(location);
       method.addHeader("Authorization", "Basic " + Base64.encodeBase64String("odatajclient:odatajclient".getBytes()));
       method.addHeader("Cookie", authenticityCookie);
@@ -138,7 +136,7 @@ public class CXFOAuth2HttpClientFactory extends AbstractOAuth2HttpClientFactory 
     // 5. Obtain the access token
     try {
       accessToken = OAuthClientUtils.getAccessToken(
-              getAccessTokenService(), OAUTH2_CONSUMER, new AuthorizationCodeGrant(code));
+          getAccessTokenService(), OAUTH2_CONSUMER, new AuthorizationCodeGrant(code));
     } catch (OAuthServiceException e) {
       throw new OAuth2Exception(e);
     }
@@ -170,7 +168,7 @@ public class CXFOAuth2HttpClientFactory extends AbstractOAuth2HttpClientFactory 
     // refresh the token
     try {
       accessToken = OAuthClientUtils.getAccessToken(
-              getAccessTokenService(), OAUTH2_CONSUMER, new RefreshTokenGrant(refreshToken));
+          getAccessTokenService(), OAUTH2_CONSUMER, new RefreshTokenGrant(refreshToken));
     } catch (OAuthServiceException e) {
       throw new OAuth2Exception(e);
     }

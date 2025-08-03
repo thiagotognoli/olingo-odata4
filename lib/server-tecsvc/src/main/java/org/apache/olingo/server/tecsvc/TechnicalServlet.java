@@ -48,13 +48,17 @@ public class TechnicalServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger LOG = LoggerFactory.getLogger(TechnicalServlet.class);
   /**
-   * <p>ETag for the service document and the metadata document</p>
-   * <p>We use the same field for service-document and metadata-document ETags.
+   * <p>
+   * ETag for the service document and the metadata document
+   * </p>
+   * <p>
+   * We use the same field for service-document and metadata-document ETags.
    * It must change whenever the corresponding document changes.
    * We don't know when someone changed the EDM in a way that changes one of these
    * documents, but we do know that the EDM is defined completely in code and that
    * therefore any change must be deployed, resulting in re-loading of this class,
-   * giving this field a new and hopefully unique value.</p>
+   * giving this field a new and hopefully unique value.
+   * </p>
    */
   private static final String metadataETag = "W/\"" + UUID.randomUUID() + "\"";
 

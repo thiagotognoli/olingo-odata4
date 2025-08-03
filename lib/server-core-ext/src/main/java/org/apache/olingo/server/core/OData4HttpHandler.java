@@ -38,7 +38,6 @@ public class OData4HttpHandler extends ODataHttpHandlerImpl {
   private int split = 0;
   private CustomContentTypeSupport customContentTypeSupport;
 
-
   public OData4HttpHandler(OData odata, ServiceMetadata serviceMetadata) {
     super(odata, serviceMetadata);
     this.odata = odata;
@@ -60,16 +59,16 @@ public class OData4HttpHandler extends ODataHttpHandlerImpl {
       ServiceDispatcher dispatcher = new ServiceDispatcher(this.odata, this.serviceMetadata,
           handler, this.customContentTypeSupport);
       dispatcher.execute(request, response);
-      
+
     } catch (Exception e) {
-      // also handle any unchecked exception thrown by service handler for proper serialization
+      // also handle any unchecked exception thrown by service handler for proper
+      // serialization
       ErrorHandler handler = new ErrorHandler(this.odata, this.serviceMetadata,
           this.handler, ContentType.JSON);
       handler.handleException(e, request, response);
-    }    
+    }
     convertToHttp(httpResponse, response);
   }
-
 
   ODataRequest createODataRequest(final HttpServletRequest httpRequest, final int split)
       throws ODataLibraryException {
@@ -93,7 +92,7 @@ public class OData4HttpHandler extends ODataHttpHandlerImpl {
     final String maxVersion = request.getHeader(HttpHeader.ODATA_MAX_VERSION);
     response.setHeader(HttpHeader.ODATA_VERSION, ODataServiceVersion.V40.toString());
 
-    if (maxVersion != null 
+    if (maxVersion != null
         && ODataServiceVersion.isBiggerThan(ODataServiceVersion.V40.toString(), maxVersion)) {
       throw new ODataHandlerException("ODataVersion not supported: " + maxVersion, //$NON-NLS-1$
           ODataHandlerException.MessageKeys.ODATA_VERSION_NOT_SUPPORTED, maxVersion);
@@ -109,7 +108,7 @@ public class OData4HttpHandler extends ODataHttpHandlerImpl {
     }
 
     if (this.handler instanceof ProcessorServiceHandler) {
-      ((ProcessorServiceHandler)this.handler).register(processor);
+      ((ProcessorServiceHandler) this.handler).register(processor);
     }
   }
 

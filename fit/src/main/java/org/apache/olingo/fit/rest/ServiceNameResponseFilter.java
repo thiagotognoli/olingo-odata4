@@ -38,12 +38,12 @@ public class ServiceNameResponseFilter implements ContainerResponseFilter {
   public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext)
       throws IOException {
 
-    final String svcName =
-        StringUtils.substringBefore(StringUtils.substringAfter(requestContext.getUriInfo().getPath(), "/"), "/");
+    final String svcName = StringUtils
+        .substringBefore(StringUtils.substringAfter(requestContext.getUriInfo().getPath(), "/"), "/");
 
     if ("OAuth2.svc".equals(svcName) && responseContext.getEntity() != null) {
-      final String content = IOUtils.toString((InputStream) responseContext.getEntity(), Constants.ENCODING).
-          replaceAll("Static\\.svc", svcName);
+      final String content = IOUtils.toString((InputStream) responseContext.getEntity(), Constants.ENCODING)
+          .replaceAll("Static\\.svc", svcName);
 
       final InputStream toBeStreamedBack = IOUtils.toInputStream(content, Constants.ENCODING);
       final ByteArrayOutputStream baos = new ByteArrayOutputStream();

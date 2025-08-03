@@ -29,7 +29,6 @@ import org.apache.cxf.rs.security.oauth2.tokens.refresh.RefreshToken;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class OAuth2Provider implements AuthorizationCodeDataProvider {
 
   public static final String CLIENT_ID = "odataOAuth2SVC";
@@ -55,8 +54,8 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
 
   @Override
   public ServerAccessToken getPreauthorizedToken(
-          final Client client, final List<String> list, final UserSubject us, final String string)
-          throws OAuthServiceException {
+      final Client client, final List<String> list, final UserSubject us, final String string)
+      throws OAuthServiceException {
 
     return null;
   }
@@ -68,14 +67,14 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
 
   @Override
   public ServerAuthorizationCodeGrant createCodeGrant(final AuthorizationCodeRegistration acr)
-          throws OAuthServiceException {
+      throws OAuthServiceException {
 
     grant = new ServerAuthorizationCodeGrant(client, 3600L);
     grant.setRedirectUri(acr.getRedirectUri());
     grant.setSubject(acr.getSubject());
     final List<String> scope = acr.getApprovedScope().isEmpty()
-            ? acr.getRequestedScope()
-            : acr.getApprovedScope();
+        ? acr.getRequestedScope()
+        : acr.getApprovedScope();
     grant.setApprovedScopes(scope);
 
     return grant;
@@ -84,8 +83,8 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
   @Override
   public ServerAuthorizationCodeGrant removeCodeGrant(final String code) throws OAuthServiceException {
     return grant == null || !grant.getCode().equals(code)
-            ? null
-            : grant;
+        ? null
+        : grant;
   }
 
   @Override
@@ -93,8 +92,8 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
     token = new BearerAccessToken(atr.getClient(), 3600L);
 
     final List<String> scope = atr.getApprovedScope().isEmpty()
-            ? atr.getRequestedScope()
-            : atr.getApprovedScope();
+        ? atr.getRequestedScope()
+        : atr.getApprovedScope();
     token.setScopes(convertScopeToPermissions(atr.getClient(), scope));
     token.setSubject(atr.getSubject());
     token.setGrantType(atr.getGrantType());
@@ -109,8 +108,8 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
 
   @Override
   public ServerAccessToken refreshAccessToken(
-          final Client client, final String string, final List<String> list)
-          throws OAuthServiceException {
+      final Client client, final String string, final List<String> list)
+      throws OAuthServiceException {
 
     throw new UnsupportedOperationException("Not supported yet.");
   }
@@ -121,8 +120,8 @@ public class OAuth2Provider implements AuthorizationCodeDataProvider {
   }
 
   @Override
-  public List<ServerAuthorizationCodeGrant>
-  getCodeGrants(Client client, UserSubject userSubject) throws OAuthServiceException {
+  public List<ServerAuthorizationCodeGrant> getCodeGrants(Client client, UserSubject userSubject)
+      throws OAuthServiceException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

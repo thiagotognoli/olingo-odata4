@@ -44,8 +44,8 @@ public class ContentNegotiatorTest {
   static final private String ACCEPT_CASE_ISO_8859_1 = "application/json;charset=ISO-8859-1";
   static final private String ACCEPT_CASE_FULL = ContentType.JSON_FULL_METADATA.toContentTypeString();
   static final private String ACCEPT_CASE_NONE = ContentType.JSON_NO_METADATA.toContentTypeString();
-  static final private String ACCEPT_CASE_MIN_UTF8_IEEE754 =
-      "application/json;charset=UTF-8;odata.metadata=minimal;IEEE754Compatible=true";
+  static final private String ACCEPT_CASE_MIN_UTF8_IEEE754 
+    = "application/json;charset=UTF-8;odata.metadata=minimal;IEEE754Compatible=true";
   static final private String ACCEPT_CASE_MIN_IEEE754 = ACCEPT_CASE_MIN + ";IEEE754Compatible=true";
   String ACCEPT_CASE_MIN_IEEE754_1 = ACCEPT_CASE_MIN + ";IEEE754Compatible=false";
   static final private String ACCEPT_CASE_MIN_IEEE754_FAIL = ACCEPT_CASE_MIN + ";IEEE754Compatible=xyz";
@@ -193,7 +193,7 @@ public class ContentNegotiatorTest {
 
   @Test
   public void metadataJson() throws Exception {
-    testContentNegotiation(new String[] { ACCEPT_CASE_JSON, 
+    testContentNegotiation(new String[] { ACCEPT_CASE_JSON,
         "application/json", null, null }, RepresentationType.METADATA);
   }
 
@@ -219,7 +219,7 @@ public class ContentNegotiatorTest {
       }
     }
   }
-  
+
   @Test
   public void metadataFail() throws Exception {
     for (String[] useCase : casesMetadataFail) {
@@ -270,17 +270,17 @@ public class ContentNegotiatorTest {
     if (useCase[2] != null) {
       request.addHeader(HttpHeader.ACCEPT, Arrays.asList(useCase[2]));
     }
-	
-	if (useCase.length > 4) {
+
+    if (useCase.length > 4) {
       if (useCase[4] != null) {
         request.addHeader(HttpHeader.ACCEPT_CHARSET, Arrays.asList(useCase[4]));
       }
     }
 
-    final CustomContentTypeSupport customContentTypeSupport = useCase[3] == null ? null :
-      createCustomContentTypeSupport(useCase[3]);
+    final CustomContentTypeSupport customContentTypeSupport = useCase[3] == null ? null
+        : createCustomContentTypeSupport(useCase[3]);
     final ContentType requestedContentType = ContentNegotiator.doContentNegotiation(
-          formatOption, request, customContentTypeSupport, representationType);
+        formatOption, request, customContentTypeSupport, representationType);
     assertNotNull(requestedContentType);
     if (useCase[0] != null) {
       assertEquals(ContentType.create(useCase[0]), requestedContentType);
@@ -297,18 +297,18 @@ public class ContentNegotiatorTest {
 
     CustomContentTypeSupport customContentTypeSupport = mock(CustomContentTypeSupport.class);
     when(customContentTypeSupport.modifySupportedContentTypes(
-          ArgumentMatchers.anyList(), any(RepresentationType.class)))
+        ArgumentMatchers.anyList(), any(RepresentationType.class)))
         .thenReturn(types);
     return customContentTypeSupport;
   }
-  
+
   @Test
   public void testAcceptCharset() throws Exception {
     for (String[] useCase : casesAcceptCharset) {
       testContentNegotiation(useCase, RepresentationType.ENTITY);
     }
   }
-  
+
   @Test
   public void testAcceptCharsetFail() throws Exception {
     for (String[] useCase : casesAcceptCharsetFail) {
@@ -324,23 +324,23 @@ public class ContentNegotiatorTest {
       }
     }
   }
-  
+
   @Test
   public void testSupportedTypes() throws ContentNegotiatorException, IllegalArgumentException {
-    assertTrue(ContentNegotiator.isSupported(ContentType.create("a/b"), 
+    assertTrue(ContentNegotiator.isSupported(ContentType.create("a/b"),
         createCustomContentTypeSupport("a/b"), RepresentationType.ENTITY));
-    assertFalse(ContentNegotiator.isSupported(ContentType.create("a/b"), 
+    assertFalse(ContentNegotiator.isSupported(ContentType.create("a/b"),
         createCustomContentTypeSupport("x/y"), RepresentationType.ENTITY));
-    assertTrue(ContentNegotiator.isSupported(ContentType.create("a/b"), 
+    assertTrue(ContentNegotiator.isSupported(ContentType.create("a/b"),
         createCustomContentTypeSupport("a/b"), RepresentationType.BATCH));
-    assertTrue(ContentNegotiator.isSupported(ContentType.create("a/b"), 
+    assertTrue(ContentNegotiator.isSupported(ContentType.create("a/b"),
         createCustomContentTypeSupport("a/b"), RepresentationType.BINARY));
   }
-  
+
   @Test
   public void checBatchkSupport() throws Exception {
     testContentNegotiation(new String[] { ACCEPT_CASE_MULTIPART_MIXED, null, ACCEPT_CASE_MULTIPART_MIXED, null },
         RepresentationType.BATCH);
   }
-  
+
 }

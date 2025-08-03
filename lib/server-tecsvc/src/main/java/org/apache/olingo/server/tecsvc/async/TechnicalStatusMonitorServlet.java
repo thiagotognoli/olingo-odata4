@@ -37,9 +37,9 @@ public class TechnicalStatusMonitorServlet extends HttpServlet {
       throws ServletException, IOException {
     try {
       TechnicalAsyncService asyncService = TechnicalAsyncService.getInstance();
-      if("/list".equals(request.getPathInfo())) {
+      if ("/list".equals(request.getPathInfo())) {
         asyncService.listQueue(response);
-      } else if(asyncService.isStatusMonitorResource(request)) {
+      } else if (asyncService.isStatusMonitorResource(request)) {
         asyncService.handle(request, response);
       }
     } catch (final Exception e) {

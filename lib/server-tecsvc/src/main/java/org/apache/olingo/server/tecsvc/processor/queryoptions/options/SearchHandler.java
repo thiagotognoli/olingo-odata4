@@ -170,7 +170,7 @@ public class SearchHandler {
           HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), Locale.ROOT);
     }
   }
-  
+
   private static boolean isTrue(final SearchExpression searchExpression, final Entity entity)
       throws ODataApplicationException {
     if (searchExpression.isSearchBinary()) {
@@ -191,7 +191,7 @@ public class SearchHandler {
     throw new ODataApplicationException("Found unknown SearchExpression: " + searchExpression,
         HttpStatusCode.INTERNAL_SERVER_ERROR.getStatusCode(), Locale.ROOT);
   }
-  
+
   private static boolean isTrue(final SearchExpression searchExpression, final Property property)
       throws ODataApplicationException {
     if (searchExpression.isSearchBinary()) {

@@ -53,7 +53,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   protected InputStream addLinks(
       final String entitySetName, final String entitykey, final InputStream is, final Set<String> links)
-          throws IOException {
+      throws IOException {
 
     final ObjectNode srcNode = (ObjectNode) mapper.readTree(is);
     IOUtils.closeQuietly(is);
@@ -133,7 +133,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   protected InputStream normalizeLinks(
       final String entitySetName, final String entityKey, final InputStream is, final NavigationLinks links)
-          throws IOException {
+      throws IOException {
 
     final ObjectNode srcNode = (ObjectNode) mapper.readTree(is);
 
@@ -239,7 +239,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   public InputStream readEntities(
       final List<String> links, final String linkName, final String next, final boolean forceFeed)
-          throws IOException {
+      throws IOException {
 
     if (links.isEmpty()) {
       throw new NotFoundException();
@@ -256,8 +256,8 @@ public class JSONUtilities extends AbstractUtilities {
     for (String link : links) {
       try {
         final Map.Entry<String, String> uriMap = Commons.parseEntityURI(link);
-        final Map.Entry<String, InputStream> entity =
-            readEntity(uriMap.getKey(), uriMap.getValue(), Accept.JSON_FULLMETA);
+        final Map.Entry<String, InputStream> entity = readEntity(uriMap.getKey(), uriMap.getValue(),
+            Accept.JSON_FULLMETA);
 
         if (bos.size() > 1) {
           bos.write(",".getBytes());
@@ -287,7 +287,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   protected InputStream replaceLink(
       final InputStream toBeChanged, final String linkName, final InputStream replacement)
-          throws IOException {
+      throws IOException {
 
     final ObjectNode toBeChangedNode = (ObjectNode) mapper.readTree(toBeChanged);
     final ObjectNode replacementNode = (ObjectNode) mapper.readTree(replacement);
@@ -383,7 +383,7 @@ public class JSONUtilities extends AbstractUtilities {
   @Override
   public InputStream replaceProperty(
       final InputStream src, final InputStream replacement, final List<String> path, final boolean justValue)
-          throws IOException {
+      throws IOException {
 
     final ObjectNode srcNode = (ObjectNode) mapper.readTree(src);
     IOUtils.closeQuietly(src);

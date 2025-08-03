@@ -30,37 +30,47 @@ import org.apache.olingo.server.api.serializer.CustomContentTypeSupport;
 public interface ODataHttpHandler extends ODataHandler {
 
   /**
-   * <p>Processes a HttpServletRequest as an OData request.</p>
-   * <p>This includes URI parsing, content negotiation, dispatching the request
+   * <p>
+   * Processes a HttpServletRequest as an OData request.
+   * </p>
+   * <p>
+   * This includes URI parsing, content negotiation, dispatching the request
    * to a specific custom processor implementation for handling data and
-   * creating the serialized content for the response object.</p>
-   * @param request - must be a HTTP OData request
+   * creating the serialized content for the response object.
+   * </p>
+   * 
+   * @param request  - must be a HTTP OData request
    * @param response - HTTP OData response
    */
   void process(HttpServletRequest request, HttpServletResponse response);
-  
+
   /**
    * Sets the split parameter which is used for service resolution.
-   * @param split the number of path segments reserved for service resolution; default is 0
+   * 
+   * @param split the number of path segments reserved for service resolution;
+   *              default is 0
    */
   void setSplit(int split);
 
-
   /**
    * Registers the debug support handler.
+   * 
    * @param debugSupport handler to register
    */
   void register(DebugSupport debugSupport);
 
   /**
-   * Registers a service implementation for modifying the standard list of supported
+   * Registers a service implementation for modifying the standard list of
+   * supported
    * content types.
+   * 
    * @see CustomContentTypeSupport
    */
   void register(CustomContentTypeSupport customContentTypeSupport);
 
   /**
    * Registers support for concurrency control for certain entity sets.
+   * 
    * @param customETagSupport handler to register
    */
   void register(CustomETagSupport customETagSupport);

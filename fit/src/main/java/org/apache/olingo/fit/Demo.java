@@ -43,14 +43,14 @@ import java.io.InputStream;
 public class Demo extends Services {
 
   public Demo() throws IOException {
-    super(new Metadata(FSManager.instance().
-        readRes("demo" + StringUtils.capitalize(Constants.get(ConstantKey.METADATA)), Accept.XML)));
+    super(new Metadata(FSManager.instance()
+        .readRes("demo" + StringUtils.capitalize(Constants.get(ConstantKey.METADATA)), Accept.XML)));
   }
 
   private Response replaceServiceName(final Response response) {
     try {
-      final String content = IOUtils.toString((InputStream) response.getEntity(), Constants.ENCODING).
-          replaceAll("Static\\.svc", "Demo.svc");
+      final String content = IOUtils.toString((InputStream) response.getEntity(), Constants.ENCODING)
+          .replaceAll("Static\\.svc", "Demo.svc");
 
       final Response.ResponseBuilder builder = Response.status(response.getStatus());
       for (String headerName : response.getHeaders().keySet()) {

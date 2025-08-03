@@ -52,15 +52,20 @@ import java.util.regex.Pattern;
  * The TechnicalAsyncService provides asynchronous support for any Processor.
  * To use it following steps are necessary:
  * <ul>
- *   <li>Get the instance</li>
- *   <li>Create an instance of the Processor which should be wrapped for asynchronous support
- *   (do not forget to call the <code>init(...)</code> method on the processor)</li>
- *   <li>register the Processor instance via the <code>register(...)</code> method</li>
- *   <li>prepare the corresponding method with the request parameters via the
- *   <code>prepareFor()</code> method at the AsyncProcessor</li>
- *   <li>start the async processing via the <code>processAsync()</code> methods</li>
+ * <li>Get the instance</li>
+ * <li>Create an instance of the Processor which should be wrapped for
+ * asynchronous support
+ * (do not forget to call the <code>init(...)</code> method on the
+ * processor)</li>
+ * <li>register the Processor instance via the <code>register(...)</code>
+ * method</li>
+ * <li>prepare the corresponding method with the request parameters via the
+ * <code>prepareFor()</code> method at the AsyncProcessor</li>
+ * <li>start the async processing via the <code>processAsync()</code>
+ * methods</li>
  * </ul>
  * A short code snippet is shown below:
+ * 
  * <pre>
  * <code>
  * TechnicalAsyncService asyncService = TechnicalAsyncService.getInstance();
@@ -77,8 +82,8 @@ public class TechnicalAsyncService {
   public static final String TEC_ASYNC_SLEEP = "tec.sleep";
   public static final String STATUS_MONITOR_TOKEN = "status";
 
-  private static final Map<String, AsyncRunner> LOCATION_2_ASYNC_RUNNER =
-      Collections.synchronizedMap(new HashMap<String, AsyncRunner>());
+  private static final Map<String, AsyncRunner> LOCATION_2_ASYNC_RUNNER = Collections
+      .synchronizedMap(new HashMap<String, AsyncRunner>());
   private static final ExecutorService ASYNC_REQUEST_EXECUTOR = Executors.newFixedThreadPool(10);
   private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
 
@@ -160,7 +165,6 @@ public class TechnicalAsyncService {
 
     writeToResponse(response, sb.toString());
   }
-
 
   private static void writeToResponse(HttpServletResponse response, InputStream input) throws IOException {
     copy(input, response.getOutputStream());
